@@ -47,14 +47,32 @@ body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-siz
 .bar .theme{grid-area:theme}
 .bar .btn{min-height:44px;padding:8px 14px;font-size:.92rem;white-space:nowrap}
 .bar .btn svg{width:18px;height:18px}
-@media (max-width:680px){
+.t-short{display:none}
+.ns{display:none}
+@media (max-width:360px){ .bar .nl{display:none} .bar .ns{display:inline} }
+@media (max-width:1000px){ .bar .t-long{display:none} .bar .t-short{display:inline} }
+@media (max-width:860px){
   .bar{grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"sec theme" "pri pri"}
   .bar-sec,.bar-pri{min-width:0}
   .bar-sec .btn,.bar-pri .mw{flex:1 1 0;min-width:0}
   .bar .btn{padding:8px 10px;font-size:.88rem}
 }
-.t-short{display:none}
-@media (max-width:440px){ .bar .t-long{display:none} .bar .t-short{display:inline} .bar .btn{padding:8px 8px;gap:6px} }
+@media (max-width:480px){
+  .bar .btn{padding:8px 8px;gap:6px}
+  .bar .js-new svg,.bar .js-example svg{display:none}
+  .bar .js-hist{flex:0 0 44px;padding:0}
+  .bar .js-hist .t-hist{display:none}
+}
+/* Rodapé: mesma barra, Salvar/Compartilhar primeiro e sem o tema */
+.fim-area{gap:14px}
+.bar.foot{grid-template-columns:auto 1fr auto;grid-template-areas:"pri . sec";background:transparent;border:0;border-radius:0;padding:0}
+.bar.foot .bar-pri .btn{min-height:54px;padding:12px 24px;font-size:1.02rem}
+.bar.foot .bar-pri .btn svg{width:20px;height:20px}
+@media (max-width:900px){ .bar.foot{grid-template-columns:minmax(0,1fr);grid-template-areas:"pri" "sec"} }
+@media (max-width:440px){ .bar.foot .bar-pri .btn{padding:12px 10px;font-size:.96rem} }
+@media (max-width:400px){ .bar.foot .bar-pri .btn{padding:12px 6px;gap:6px;font-size:.92rem} .bar.foot .bar-pri .btn svg:not(.caret){display:none} }
+@media (max-width:360px){ .bar .bar-pri .btn svg:not(.caret){display:none} }
+@media (max-width:340px){ .bar.foot .bar-pri .btn{padding:12px 4px;font-size:.86rem} }
 .theme{flex:none;width:44px;height:44px;border-radius:10px;border:1px solid var(--line);background:transparent;color:var(--ink);display:inline-flex;align-items:center;justify-content:center;cursor:pointer}
 @media (hover:hover){.theme:hover{border-color:var(--brand);color:var(--brand)}}
 .theme svg{width:20px;height:20px}
@@ -74,6 +92,45 @@ body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-siz
 .menu svg{width:24px;height:24px;color:var(--brand);flex:none}
 .menu b{display:block;font-size:.96rem;font-weight:600}
 .menu small{display:block;font-size:.8rem;color:var(--muted);margin-top:1px}
+
+/* Endereços dos imóveis (até 4) */
+.addr-list{display:flex;flex-direction:column;gap:8px}
+.addr{display:flex;gap:8px;align-items:center}
+.addr input{flex:1;min-width:0}
+.addr-x{flex:none;width:48px;height:48px;border-radius:8px;border:1px solid var(--line);background:transparent;color:var(--muted);display:inline-flex;align-items:center;justify-content:center;cursor:pointer}
+.addr-x svg{width:18px;height:18px}
+@media (hover:hover){.addr-x:hover{border-color:var(--warn);color:var(--warn)}}
+.addr-foot{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:2px}
+.addr-foot .btn svg{width:18px;height:18px}
+
+/* Janela do histórico */
+.dlg{width:min(600px,calc(100vw - 32px));max-height:min(80vh,720px);padding:0;border:1px solid var(--line);border-radius:14px;background:var(--sheet);color:var(--ink);box-shadow:0 24px 60px rgba(0,0,0,.3)}
+.dlg[open]{display:flex;flex-direction:column}
+.dlg::backdrop{background:rgba(20,16,16,.5)}
+.dlg-h{display:flex;align-items:flex-start;gap:12px;padding:18px 18px 12px}
+.dlg-h .st{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1}
+.dlg-h h2{font-family:var(--font-display);font-size:1.3rem;margin:0}
+.dlg-h .hint{color:var(--muted);font-size:.85rem}
+.dlg-x{flex:none;width:44px;height:44px;border-radius:10px;border:1px solid var(--line);background:transparent;color:var(--ink);display:inline-flex;align-items:center;justify-content:center;cursor:pointer}
+.dlg-x svg{width:18px;height:18px}
+#histSearch{margin:0 18px 10px;width:calc(100% - 36px)}
+.hist-list{list-style:none;margin:0;padding:0 10px 12px;overflow-y:auto;display:flex;flex-direction:column;gap:6px}
+.hist-item{display:flex;align-items:center;gap:12px;width:100%;padding:12px;border:1px solid var(--line);border-radius:10px;background:var(--field);color:var(--ink);font:inherit;text-align:left;cursor:pointer}
+@media (hover:hover){.hist-item:hover{border-color:var(--brand)}}
+.hist-item:focus-visible{outline:3px solid color-mix(in srgb, var(--brand) 55%, transparent);outline-offset:2px}
+.hist-main{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}
+.hist-name{font-weight:700;font-size:1rem;overflow-wrap:anywhere}
+.hist-meta{font-size:.84rem;color:var(--muted);font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.hist-side{flex:none;display:flex;flex-direction:column;align-items:flex-end;gap:6px;text-align:right}
+.hist-when{font-size:.8rem;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+.pill{display:inline-block;font-size:.72rem;font-weight:700;letter-spacing:.02em;padding:3px 8px;border-radius:999px;white-space:nowrap}
+.pill.pend{background:color-mix(in srgb, var(--warn) 14%, transparent);color:var(--warn)}
+.pill.done{background:color-mix(in srgb, var(--ok) 14%, transparent);color:var(--ok)}
+.pill.cur{background:var(--brand-soft);color:var(--brand)}
+.pill.ex{background:var(--field);color:var(--muted);border:1px solid var(--line)}
+.hist-tags{display:flex;gap:6px;flex-wrap:wrap}
+@media (max-width:480px){.hist-item{flex-direction:column;align-items:stretch}.hist-side{flex-direction:row;align-items:center;justify-content:space-between}}
+.dlg .note{margin:0 18px 18px}
 
 /* Cabeçalho centralizado */
 .head{display:flex;flex-direction:column;align-items:center;text-align:center;gap:8px;background:var(--sheet);border:1px solid var(--line);border-radius:var(--r);padding:22px 24px 20px;border-top:4px solid var(--brand)}
@@ -115,7 +172,7 @@ body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-siz
 .hint-s{font-size:.8rem;color:var(--muted)}
 .note{margin:0;color:var(--muted);font-size:.92rem;padding:12px 14px;border:1px dashed var(--line);border-radius:8px;text-align:center}
 .req::after{content:" *";color:var(--brand)}
-input[type=text],input[type=email],input[type=tel],input[type=date],input[type=time],input[type=number],textarea{
+input[type=text],input[type=email],input[type=tel],input[type=date],input[type=time],input[type=number],input[type=search],textarea{
   width:100%;min-height:48px;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--field);color:var(--pen);
   font:500 1rem var(--font-body)}
 input::placeholder,textarea::placeholder{color:var(--muted);opacity:.75;font-weight:400}
@@ -180,6 +237,7 @@ input:focus-visible,textarea:focus-visible,button:focus-visible,summary:focus-vi
 .alert{text-align:left;border-radius:8px;padding:12px 16px;font-size:.92rem;border:1px solid var(--warn);color:var(--ink);background:color-mix(in srgb, var(--warn) 9%, var(--sheet))}
 .alert ul{margin:6px 0 0;padding-left:20px}
 .alert button{background:none;border:0;padding:0;color:var(--warn);font:600 inherit var(--font-body);text-decoration:underline;cursor:pointer;text-align:left}
+.fim-area .panel{text-align:center}
 .panel{border:1px solid var(--line);border-radius:10px;padding:16px;display:flex;flex-direction:column;align-items:center;gap:12px;background:var(--field)}
 .panel p{margin:0;font-size:.92rem;max-width:46ch}
 .panel .row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
@@ -197,8 +255,9 @@ input:focus-visible,textarea:focus-visible,button:focus-visible,summary:focus-vi
 <div class="wrap">
   <div class="bar">
     <div class="bar-sec">
-      <button type="button" class="btn quiet js-new"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Novo termo</button>
-      <button type="button" class="btn quiet js-example"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.8 4.7 4.7 1.8-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z"/><path d="M19 15v4M17 17h4"/></svg><span class="t-long">Preencher exemplo</span><span class="t-short">Exemplo</span></button>
+      <button type="button" class="btn quiet js-new"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span class="nl">Novo termo</span><span class="ns">Novo</span></button>
+      <button type="button" class="btn quiet js-hist" title="Histórico dos últimos 7 dias"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 2.64-6.36"/><path d="M3 4v5h5"/><path d="M12 7.5V12l3 2"/></svg><span class="t-hist">Histórico</span></button>
+      <button type="button" class="btn quiet js-example"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.8 4.7 4.7 1.8-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z"/><path d="M19 15v4M17 17h4"/></svg><span class="t-long">Termo exemplo</span><span class="t-short">Exemplo</span></button>
     </div>
     <div class="bar-pri">
       <div class="mw"><button type="button" class="btn js-menu" aria-haspopup="menu" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>Salvar<svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button><div class="menu" role="menu" aria-label="Salvar" hidden><button type="button" role="menuitem" data-act="save-pdf"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/></svg><span><b>PDF do termo</b><small>Termo assinado deste cliente</small></span></button><button type="button" role="menuitem" data-act="save-xlsx"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18"/></svg><span><b>Planilha Excel</b><small>Todos os termos deste tablet</small></span></button></div></div>
@@ -220,19 +279,6 @@ input:focus-visible,textarea:focus-visible,button:focus-visible,summary:focus-vi
   <form id="form" novalidate autocomplete="off">
   <div class="wrap">
 
-  <!-- TIPO DE IMÓVEL -->
-  <details class="sec fold" id="s-tipo" open>
-    <summary><span class="st"><h2>Tipo de imóvel</h2></span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
-    <div class="sec-body">
-      <div class="f" id="tipoBox">
-        <div class="opts" role="radiogroup" aria-label="Tipo de imóvel">
-          <label class="opt big"><input type="radio" name="tipo" value="residencial"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11 12 4l9 7"/><path d="M5 9.5V20h14V9.5"/><path d="M10 20v-6h4v6"/></svg>Residencial</span></label>
-          <label class="opt big"><input type="radio" name="tipo" value="comercial"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="1"/><path d="M9 7h2M13 7h2M9 11h2M13 11h2M9 15h2M13 15h2"/><path d="M11 21v-3h2v3"/></svg>Comercial</span></label>
-        </div>
-      </div>
-    </div>
-  </details>
-
   <!-- IDENTIFICAÇÃO -->
   <details class="sec fold" id="s-ident" open>
     <summary><span class="st"><h2>Seus dados</h2><span class="hint">Quem está retirando as chaves</span></span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
@@ -252,7 +298,16 @@ input:focus-visible,textarea:focus-visible,button:focus-visible,summary:focus-vi
     <summary><span class="st"><h2>Retirada das chaves</h2></span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
     <div class="sec-body">
     <div class="grid">
-      <div class="f c12"><label for="imovel" class="req">Endereço do(s) imóvel(is) que vai visitar</label><input type="text" id="imovel" autocapitalize="words" placeholder="Rua, número, bairro"></div>
+      <div class="f c12" id="tipoBox"><span class="lbl req">Tipo de imóvel</span>
+        <div class="opts" role="radiogroup" aria-label="Tipo de imóvel">
+          <label class="opt big"><input type="radio" name="tipo" value="residencial"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11 12 4l9 7"/><path d="M5 9.5V20h14V9.5"/><path d="M10 20v-6h4v6"/></svg>Residencial</span></label>
+          <label class="opt big"><input type="radio" name="tipo" value="comercial"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="1"/><path d="M9 7h2M13 7h2M9 11h2M13 11h2M9 15h2M13 15h2"/><path d="M11 21v-3h2v3"/></svg>Comercial</span></label>
+        </div>
+      </div>
+      <div class="f c12" id="imoveisBox"><label for="imovel1" class="req">Endereço do(s) imóvel(is) que vai visitar</label>
+        <div class="addr-list"><div class="addr" data-i="1"><input type="text" id="imovel1" autocapitalize="words" placeholder="Rua, número, bairro"></div><div class="addr" data-i="2" hidden><input type="text" id="imovel2" autocapitalize="words" placeholder="2º endereço: rua, número, bairro" aria-label="2º endereço"><button type="button" class="addr-x" data-rm="2" aria-label="Remover 2º endereço" title="Remover endereço"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div><div class="addr" data-i="3" hidden><input type="text" id="imovel3" autocapitalize="words" placeholder="3º endereço: rua, número, bairro" aria-label="3º endereço"><button type="button" class="addr-x" data-rm="3" aria-label="Remover 3º endereço" title="Remover endereço"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div><div class="addr" data-i="4" hidden><input type="text" id="imovel4" autocapitalize="words" placeholder="4º endereço: rua, número, bairro" aria-label="4º endereço"><button type="button" class="addr-x" data-rm="4" aria-label="Remover 4º endereço" title="Remover endereço"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div></div>
+        <div class="addr-foot"><button type="button" class="btn small quiet" id="addrAdd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Adicionar endereço</button><span class="hint-s" id="addrCount">1 de 4</span></div>
+      </div>
       <div class="f c4"><label for="data" class="req">Data</label><input type="date" id="data"></div>
       <div class="f c4"><label for="horaRetirada" class="req">Hora da retirada</label><input type="time" id="horaRetirada"></div>
       <div class="f c4"><label for="devolucao" class="req">Devolver as chaves até</label><input type="time" id="devolucao"></div>
@@ -276,6 +331,18 @@ input:focus-visible,textarea:focus-visible,button:focus-visible,summary:focus-vi
     </div>
   </details>
 
+  <!-- ASSINATURA -->
+  <details class="sec fold" id="s-sig" open>
+    <summary><span class="st"><h2>Assinatura</h2><span class="hint">Assine com o dedo ou com a caneta</span></span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
+    <div class="sec-body">
+    <div class="f" id="aceiteBox"><div class="opts"><label class="opt wide"><input type="checkbox" id="aceite"><span>Li e concordo com a declaração de retirada das chaves</span></label></div></div>
+    <div class="sig" id="sigBox">
+      <div class="sig-pad" id="padCliente"><canvas id="sigCliente" aria-label="Quadro de assinatura do cliente"></canvas><div class="base"></div><div class="ph">Assine aqui</div></div>
+      <div class="sig-row"><div class="sig-who"><strong id="whoCliente">Cliente</strong><span id="sigWhen">Retirante das chaves</span></div><button type="button" class="btn small quiet" id="sigClear">Limpar assinatura</button></div>
+    </div>
+    </div>
+  </details>
+
   <!-- CADASTRO DE INTERESSADOS -->
   <details class="sec fold" id="s-cad" open>
     <summary><span class="st"><h2>Seu interesse no imóvel</h2><span class="hint">Opcional</span></span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
@@ -284,7 +351,7 @@ input:focus-visible,textarea:focus-visible,button:focus-visible,summary:focus-vi
       <div class="f c6"><span class="lbl">Gostou do imóvel?</span><div class="opts"><label class="opt"><input type="radio" name="gostou" value="sim"><span>Sim</span></label><label class="opt"><input type="radio" name="gostou" value="nao"><span>Não</span></label></div></div>
       <div class="f c6"><span class="lbl">Levou a relação de documentos?</span><div class="opts"><label class="opt"><input type="radio" name="levouDocs" value="sim"><span>Sim</span></label><label class="opt"><input type="radio" name="levouDocs" value="nao"><span>Não</span></label></div></div>
     </div>
-    <p class="note" id="tipoNote">Escolha o tipo de imóvel no início do termo para ver as demais perguntas.</p>
+    <p class="note" id="tipoNote">Escolha o tipo de imóvel em "Retirada das chaves" para ver as demais perguntas.</p>
     <div class="grid" data-tipo="residencial" hidden>
       <div class="f c3"><label for="comodos">Quantos cômodos</label><input type="number" id="comodos" inputmode="numeric" min="0"></div>
       <div class="f c3"><label for="pessoas">Para quantas pessoas</label><input type="number" id="pessoas" inputmode="numeric" min="0"></div>
@@ -305,37 +372,26 @@ input:focus-visible,textarea:focus-visible,button:focus-visible,summary:focus-vi
     </div>
   </details>
 
-  <!-- ASSINATURA -->
-  <details class="sec fold" id="s-sig" open>
-    <summary><span class="st"><h2>Assinatura</h2><span class="hint">Assine com o dedo ou com a caneta</span></span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
-    <div class="sec-body">
-    <div class="f" id="aceiteBox"><div class="opts"><label class="opt wide"><input type="checkbox" id="aceite"><span>Li e concordo com a declaração de retirada das chaves</span></label></div></div>
-    <div class="sig" id="sigBox">
-      <div class="sig-pad" id="padCliente"><canvas id="sigCliente" aria-label="Quadro de assinatura do cliente"></canvas><div class="base"></div><div class="ph">Assine aqui</div></div>
-      <div class="sig-row"><div class="sig-who"><strong id="whoCliente">Cliente</strong><span id="sigWhen">Retirante das chaves</span></div><button type="button" class="btn small quiet" id="sigClear">Limpar assinatura</button></div>
-    </div>
-    </div>
-  </details>
-
-  <!-- FINALIZAR -->
-  <section class="sec fim" id="s-fim">
+  <!-- FINALIZAR: barra igual à do topo, invertida e sem o tema -->
+  <section class="sec fim-area" id="s-fim">
     <div class="sec-h"><h2>Finalizar</h2></div>
-    <div class="fim-col">
-      <div class="alert" id="errors" hidden></div>
-      <div class="actions">
+    <div class="alert" id="errors" hidden></div>
+    <div class="bar foot">
+      <div class="bar-pri">
         <div class="mw"><button type="button" class="btn js-menu" aria-haspopup="menu" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>Salvar<svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button><div class="menu up" role="menu" aria-label="Salvar" hidden><button type="button" role="menuitem" data-act="save-pdf"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/></svg><span><b>PDF do termo</b><small>Termo assinado deste cliente</small></span></button><button type="button" role="menuitem" data-act="save-xlsx"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18"/></svg><span><b>Planilha Excel</b><small>Todos os termos deste tablet</small></span></button></div></div>
         <div class="mw"><button type="button" class="btn ghost js-menu" aria-haspopup="menu" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4"/><path d="m15.4 6.5-6.8 4"/></svg>Compartilhar<svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button><div class="menu right up" role="menu" aria-label="Compartilhar" hidden><button type="button" role="menuitem" data-act="share-pdf"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/></svg><span><b>PDF do termo</b><small>Termo assinado deste cliente</small></span></button><button type="button" role="menuitem" data-act="share-xlsx"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18"/></svg><span><b>Planilha Excel</b><small>Todos os termos deste tablet</small></span></button></div></div>
       </div>
-      <div class="panel" id="sharePanel" hidden>
-        <p id="shareMsg"></p>
-        <div class="row">
-          <a class="btn small" id="waLink" href="https://wa.me/" target="_blank" rel="noopener">Abrir WhatsApp</a>
-          <a class="btn small ghost" id="mailLink" href="mailto:">Abrir e-mail</a>
-        </div>
+      <div class="bar-sec">
+        <button type="button" class="btn quiet js-new"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span class="nl">Novo termo</span><span class="ns">Novo</span></button>
+        <button type="button" class="btn quiet js-hist" title="Histórico dos últimos 7 dias"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 2.64-6.36"/><path d="M3 4v5h5"/><path d="M12 7.5V12l3 2"/></svg><span class="t-hist">Histórico</span></button>
+        <button type="button" class="btn quiet js-example"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.8 4.7 4.7 1.8-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z"/><path d="M19 15v4M17 17h4"/></svg><span class="t-long">Termo exemplo</span><span class="t-short">Exemplo</span></button>
       </div>
-      <div class="tools">
-        <button type="button" class="btn small quiet js-new"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Novo termo</button>
-        <button type="button" class="btn small quiet js-example"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.8 4.7 4.7 1.8-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z"/><path d="M19 15v4M17 17h4"/></svg><span class="t-long">Preencher exemplo</span><span class="t-short">Exemplo</span></button>
+    </div>
+      <div class="panel" id="sharePanel" hidden>
+      <p id="shareMsg"></p>
+      <div class="row">
+        <a class="btn small" id="waLink" href="https://wa.me/" target="_blank" rel="noopener">Abrir WhatsApp</a>
+        <a class="btn small ghost" id="mailLink" href="mailto:">Abrir e-mail</a>
       </div>
     </div>
   </section>
@@ -343,6 +399,12 @@ input:focus-visible,textarea:focus-visible,button:focus-visible,summary:focus-vi
   </div>
   </form>
 </div>
+<dialog class="dlg" id="histDlg" aria-labelledby="histTitle">
+  <div class="dlg-h"><div class="st"><h2 id="histTitle">Histórico</h2><span class="hint">Termos salvos neste tablet nos últimos 7 dias</span></div><button type="button" class="dlg-x" id="histClose" aria-label="Fechar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+  <input type="search" id="histSearch" placeholder="Buscar por nome, CPF ou nº do termo" autocomplete="off" aria-label="Buscar no histórico">
+  <ul class="hist-list" id="histList"></ul>
+  <p class="note" id="histEmpty" hidden></p>
+</dialog>
 <div class="toast" id="toast" role="status" aria-live="polite" hidden><span id="toastMsg"></span><button type="button" id="toastBtn" hidden></button></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -374,12 +436,12 @@ const TIPOS = { residencial:'Residencial', comercial:'Comercial' };
 const FORMATOS = { fisico:'Físico', digital:'Digital' };
 /* documentos aceitos; "digital" indica se existe versão digital oficial */
 const DOCS = {
-  rg:         { nome:'RG', art:'do', fem:false, digital:true },
-  cnh:        { nome:'CNH', art:'da', fem:true, digital:true },
-  conselho:   { nome:'Carteira de conselho profissional', art:'da', fem:true, digital:true },
-  rne:        { nome:'RNE', art:'do', fem:false, digital:false },
-  ctps:       { nome:'Carteira de trabalho', art:'da', fem:true, digital:true },
-  passaporte: { nome:'Passaporte', art:'do', fem:false, digital:false }
+  rg:         { nome:'RG', art:'o', fem:false, digital:true },
+  cnh:        { nome:'CNH', art:'a', fem:true, digital:true },
+  conselho:   { nome:'Carteira de conselho profissional', art:'a', fem:true, digital:true },
+  rne:        { nome:'RNE', art:'o', fem:false, digital:false },
+  ctps:       { nome:'Carteira de trabalho', art:'a', fem:true, digital:true },
+  passaporte: { nome:'Passaporte', art:'o', fem:false, digital:false }
 };
 const SN  = { sim:'Sim', nao:'Não' };
 const GAR = { fiador:'Fiador', seguro:'Seguro fiança', caucao:'Depósito caução' };
@@ -420,12 +482,29 @@ const val = id => ($(id).value||'').trim();
 const chk = id => $(id).checked;
 const rad = name => { const r=form.querySelector('input[name="'+name+'"]:checked'); return r?r.value:''; };
 
-/* documento: "da CNH física", "do RG digital" */
+/* documento: "a CNH física", "o RG digital" */
 function docPhrase(){
   const d=DOCS[rad('docTipo')], f=rad('docFormato'); if(!d) return '';
   const fmt = f==='fisico' ? (d.fem?'física':'físico') : f==='digital' ? 'digital' : '';
   return d.art+' '+d.nome+(fmt?' '+fmt:'');
 }
+
+/* ---------- endereços dos imóveis (até 4) ---------- */
+const MAX_ADDR=4; let addrN=1;
+const addrs = () => [1,2,3,4].map(i=>val('imovel'+i)).filter(Boolean);
+function addrText(){ const a=addrs(); return a.length<=1 ? (a[0]||'') : a.slice(0,-1).join('; ')+' e '+a[a.length-1]; }
+function syncAddr(fromValues){
+  if(fromValues){ addrN=1; for(let i=MAX_ADDR;i>1;i--){ if(val('imovel'+i)){ addrN=i; break; } } }
+  all('#imoveisBox .addr').forEach(r=>{ r.hidden = +r.dataset.i > addrN; });
+  $('addrAdd').hidden = addrN>=MAX_ADDR;
+  $('addrCount').textContent = addrN+' de '+MAX_ADDR;
+}
+$('addrAdd').addEventListener('click',()=>{ if(addrN>=MAX_ADDR) return; addrN++; syncAddr(); $('imovel'+addrN).focus(); saveDraft(); });
+$('imoveisBox').addEventListener('click',e=>{
+  const b=e.target.closest('[data-rm]'); if(!b) return;
+  for(let i=+b.dataset.rm;i<MAX_ADDR;i++) $('imovel'+i).value=$('imovel'+(i+1)).value;
+  $('imovel'+MAX_ADDR).value=''; addrN=Math.max(1,addrN-1); syncAddr(); refresh(); saveDraft();
+});
 
 /* ---------- estado do termo ---------- */
 const state = { protocolo:'', exemplo:false, assinadoEm:0 };
@@ -450,10 +529,10 @@ function applyDocFilter(){
 function slot(v, fallback){ return v ? '<b>'+esc(v)+'</b>' : '<span class="empty">['+fallback+']</span>'; }
 function renderDecl(){
   $('declText').innerHTML =
-   '<p>Declaro haver retirado nesta data na <strong>A. Rodrigues Imóveis S/S Ltda</strong>, as chaves do(s) imóvel(is) situado(s) à '+slot(val('imovel'),'endereço do imóvel')+
+   '<p>Declaro haver retirado nesta data na <strong>A. Rodrigues Imóveis S/S Ltda</strong>, as chaves do(s) imóvel(is) situado(s) à '+slot(addrText(),'endereço do imóvel')+
    ', para, única e exclusivamente, visitá-lo com pretensão em locar o mesmo, compromissando-me em devolver as chaves nesta Imobiliária até às '+slot(val('devolucao'),'horário')+
    ' horas deste mesmo dia. Estou ciente de que não sou autorizado a retirar ou deixar qualquer objeto no imóvel, bem como manter posse das chaves após o horário retro mencionado, sob pena de estar incorrendo nos crimes de <u>apropriação indébita</u> e <u>esbulho possessório</u> descritos nos artigos <strong>161</strong> e <strong>168</strong> do <strong>Código Penal</strong>.</p>'+
-   '<p>Declaro, ainda, haver fornecido cópia digital '+slot(docPhrase(),'documento')+', ciente que esta documentação permanecerá em arquivo como comprovante da visita e responsabilidade pela devolução da(s) chave(s) recebida(s).</p>'+
+   '<p>Declaro, ainda, haver fornecido '+slot(docPhrase(),'documento')+', ciente que esta documentação permanecerá em arquivo como comprovante da visita e responsabilidade pela devolução da(s) chave(s) recebida(s).</p>'+
    '<p>São Paulo, '+slot(fmtDateLong(val('data')),'data')+'. Hora da retirada das chaves: '+slot(val('horaRetirada'),'hora')+' hs.</p>';
   $('whoCliente').textContent = val('nome') || 'Cliente';
   $('sigWhen').textContent = state.assinadoEm ? 'Assinado em '+fmtStamp(state.assinadoEm) : 'Retirante das chaves';
@@ -539,15 +618,15 @@ new MutationObserver(()=>pad.redraw()).observe(document.documentElement,{attribu
 /* ---------- validação ---------- */
 const touched={}; let showAll=false;
 const GROUP_BOX = { tipo:'tipoBox', docFormato:'docFormatoBox', docTipo:'docTipoBox' };
-const VALIDATED = ['tipoBox','nome','cpf','telefone','email','imovel','data','horaRetirada','devolucao','docFormatoBox','docTipoBox','aceite','padCliente'];
+const VALIDATED = ['nome','cpf','telefone','email','tipoBox','imovel1','data','horaRetirada','devolucao','docFormatoBox','docTipoBox','aceite','padCliente'];
 function checks(){
   const p=[]; const add=(id,label,msg)=>p.push({id,label,msg});
-  if(!rad('tipo')) add('tipoBox','Tipo de imóvel','Escolha se o imóvel é residencial ou comercial.');
   if(!val('nome')) add('nome','Nome completo','Informe o nome completo.');
   const cpf=val('cpf'); if(!cpf) add('cpf','CPF','Informe o CPF.'); else if(!validCPF(cpf)) add('cpf','CPF','CPF inválido. Confira os números.');
   const tel=onlyDigits(val('telefone')); if(!tel) add('telefone','Telefone / WhatsApp','Informe um telefone com DDD.'); else if(tel.length<10) add('telefone','Telefone / WhatsApp','Telefone incompleto. Inclua o DDD.');
   const em=val('email'); if(em && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(em)) add('email','E-mail','E-mail inválido. Confira o endereço.');
-  if(!val('imovel')) add('imovel','Endereço do imóvel','Informe o endereço do imóvel.');
+  if(!rad('tipo')) add('tipoBox','Tipo de imóvel','Escolha se o imóvel é residencial ou comercial.');
+  if(!val('imovel1')) add('imovel1','Endereço do imóvel','Informe o endereço do imóvel.');
   if(!val('data')) add('data','Data','Informe a data.');
   if(!val('horaRetirada')) add('horaRetirada','Hora da retirada','Informe a hora da retirada.');
   const dv=val('devolucao'), hr=val('horaRetirada');
@@ -625,7 +704,8 @@ function collect(){
 }
 function apply(o){ form.querySelectorAll('input,textarea').forEach(el=>{ if(el.type==='radio') el.checked = o['r:'+el.name]===el.value; else if(el.type==='checkbox') el.checked=!!o[el.id]; else if(el.id) el.value = o[el.id]||''; }); }
 function restore(o){
-  apply(o); state.protocolo=o.__protocolo||newProtocol(); state.exemplo=!!o.__exemplo; state.assinadoEm=o.__assinadoEm||0;
+  if(o.imovel && !o.imovel1) o.imovel1=o.imovel;
+  apply(o); syncAddr(true); state.protocolo=o.__protocolo||newProtocol(); state.exemplo=!!o.__exemplo; state.assinadoEm=o.__assinadoEm||0;
   if(o.__proporcao) pad.setAspect(o.__proporcao);
   pad.setStrokes(o.__assinatura||[]); if(pad.isEmpty()) state.assinadoEm=0;
 }
@@ -647,7 +727,7 @@ function currentRecord(){
   return {
     protocolo:state.protocolo, data:val('data'), tipo:TIPOS[t]||'',
     nome:val('nome'), cpf:val('cpf'), telefone:val('telefone'), email:val('email'), endereco:val('endereco'),
-    imovel:val('imovel'), horaRetirada:val('horaRetirada'), devolucao:val('devolucao'),
+    imovel1:val('imovel1'), imovel2:val('imovel2'), imovel3:val('imovel3'), imovel4:val('imovel4'), horaRetirada:val('horaRetirada'), devolucao:val('devolucao'),
     documento:d?d.nome:'', formato:FORMATOS[rad('docFormato')]||'',
     gostou:SN[rad('gostou')]||'', levouDocs:SN[rad('levouDocs')]||'',
     ateValor:moneyNum(val('ateValor')), garantia:GAR[rad('garantia')]||'',
@@ -662,9 +742,70 @@ function currentRecord(){
 function registerInBase(){
   const a=loadBase(), r=currentRecord(), i=a.findIndex(x=>x.protocolo===r.protocolo), now=Date.now();
   if(i>=0){ r.registradoEm=a[i].registradoEm||now; r.atualizadoEm=now; a[i]=r; } else { r.registradoEm=now; a.push(r); }
-  const ok=storeBase(a);
+  const ok=storeBase(a); addToHistory();
   return !ok ? 'memoria' : state.exemplo ? 'exemplo' : 'ok';
 }
+/* ---------- histórico: termos salvos nos últimos 7 dias ---------- */
+const HIST_KEY='termo-chaves-ar-historico', HIST_DAYS=7, DAY=864e5;
+function loadHist(){ let a=[]; try{ a=JSON.parse(localStorage.getItem(HIST_KEY)||'[]'); }catch(e){} if(!Array.isArray(a)) a=[]; const lim=Date.now()-HIST_DAYS*DAY; return a.filter(x=>x && x.savedAt>=lim && x.snap); }
+function storeHist(a){ a=a.slice().sort((x,y)=>y.savedAt-x.savedAt); while(true){ try{ localStorage.setItem(HIST_KEY, JSON.stringify(a)); return true; }catch(e){ if(a.length<=1) return false; a.pop(); } } }
+function hasInterest(){ return !!(rad('gostou')||rad('levouDocs')||rad('garantia')||val('ateValor')||rad('pet')||rad('independente')||rad('boaLocal')||val('comodos')||val('pessoas')||val('criancas')||val('vagas')||val('qtsM2')||val('finalidade')); }
+function addToHistory(){
+  const a=loadHist().filter(x=>x.protocolo!==state.protocolo);
+  a.push({protocolo:state.protocolo, nome:val('nome'), cpf:val('cpf'), tipo:TIPOS[rad('tipo')]||'', interesse:hasInterest(), exemplo:state.exemplo, savedAt:Date.now(), snap:collect()});
+  storeHist(a);
+}
+function whenText(ms){
+  const d=new Date(ms), t=new Date(); const hm=pad2(d.getHours())+':'+pad2(d.getMinutes());
+  const day0=new Date(t.getFullYear(),t.getMonth(),t.getDate()).getTime();
+  if(ms>=day0) return 'Hoje às '+hm; if(ms>=day0-DAY) return 'Ontem às '+hm;
+  return pad2(d.getDate())+'/'+pad2(d.getMonth()+1)+' às '+hm;
+}
+function renderHist(){
+  const q=($('histSearch').value||'').trim().toLowerCase(), qd=/^[\d.\-\s]+$/.test(q)?onlyDigits(q):'';
+  const all_=loadHist().sort((x,y)=>y.savedAt-x.savedAt);
+  const list=all_.filter(x=>!q || (x.nome||'').toLowerCase().includes(q) || (x.protocolo||'').toLowerCase().includes(q) || (qd && onlyDigits(x.cpf).includes(qd)));
+  const ul=$('histList'); ul.textContent='';
+  list.forEach(x=>{
+    const li=document.createElement('li'), b=document.createElement('button');
+    b.type='button'; b.className='hist-item'; b.dataset.proto=x.protocolo;
+    const main=document.createElement('span'); main.className='hist-main';
+    const nm=document.createElement('span'); nm.className='hist-name'; nm.textContent=x.nome||'Sem nome';
+    const m1=document.createElement('span'); m1.className='hist-meta'; m1.textContent='CPF '+(x.cpf||'—')+' · Termo nº '+x.protocolo;
+    const tags=document.createElement('span'); tags.className='hist-tags';
+    const pill=(cls,txt)=>{ const p=document.createElement('span'); p.className='pill '+cls; p.textContent=txt; tags.appendChild(p); };
+    if(x.tipo) pill('ex',x.tipo);
+    pill(x.interesse?'done':'pend', x.interesse?'Interesse preenchido':'Interesse pendente');
+    if(x.exemplo) pill('ex','Exemplo');
+    main.append(nm,m1,tags);
+    const side=document.createElement('span'); side.className='hist-side';
+    const w=document.createElement('span'); w.className='hist-when'; w.textContent='Salvo '+whenText(x.savedAt).replace(/^H/,'h').replace(/^O/,'o');
+    side.appendChild(w);
+    if(x.protocolo===state.protocolo){ const c=document.createElement('span'); c.className='pill cur'; c.textContent='Aberto agora'; side.appendChild(c); }
+    b.append(main,side); li.appendChild(b); ul.appendChild(li);
+  });
+  const empty=$('histEmpty');
+  empty.hidden=list.length>0;
+  empty.textContent = all_.length ? 'Nenhum termo encontrado para essa busca.' : 'Nenhum termo salvo nos últimos 7 dias. Os termos entram aqui quando o PDF ou a planilha são salvos ou compartilhados.';
+}
+function openHist(){ closeMenus(); $('histSearch').value=''; renderHist(); const d=$('histDlg'); if(d.showModal){ if(!d.open) d.showModal(); } else d.setAttribute('open',''); }
+function closeHist(){ const d=$('histDlg'); if(d.close) d.close(); else d.removeAttribute('open'); }
+function loadFromHistory(proto){
+  const e=loadHist().find(x=>x.protocolo===proto); if(!e) return;
+  closeHist();
+  if(proto===state.protocolo){ toast('Este termo já está aberto'); return; }
+  const snap=snapshot();
+  restore(JSON.parse(JSON.stringify(e.snap))); resetUI(); refresh(); writeDraft();
+  const cad=$('s-cad'); cad.open=true;
+  cad.scrollIntoView({block:'start',behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});
+  toast('Termo de '+(e.nome||'cliente')+' recuperado',{label:'Desfazer',fn:undoTo(snap)});
+}
+all('.js-hist').forEach(b=>b.addEventListener('click',openHist));
+$('histClose').addEventListener('click',closeHist);
+$('histSearch').addEventListener('input',renderHist);
+$('histList').addEventListener('click',e=>{ const b=e.target.closest('[data-proto]'); if(b) loadFromHistory(b.dataset.proto); });
+$('histDlg').addEventListener('click',e=>{ if(e.target===$('histDlg')) closeHist(); });
+
 try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(()=>{}); }catch(e){}
 
 /* ---------- ao abrir: retoma o termo em andamento; dados de exemplo não voltam ---------- */
@@ -688,23 +829,26 @@ function exampleSignature(){
   return st;
 }
 function fillExample(){
-  const snap=snapshot(), hoje=todayISO(), now=nowHM(), tipo=rad('tipo')||'residencial';
-  const [h,m]=now.split(':').map(Number); const dev=pad2(Math.min(23,h+2))+':'+pad2(m);
+  const snap=snapshot(), hoje=todayISO(), tipo=rad('tipo')||'residencial';
+  /* retirada agora e devolução 2 horas depois; à noite usa um horário fixo do mesmo dia */
+  const [h,m]=nowHM().split(':').map(Number); const late=h>=22;
+  const now = late ? '20:00' : nowHM(), dev = late ? '22:00' : pad2(h+2)+':'+pad2(m);
   apply({'r:tipo':tipo,nome:'Maria Exemplo da Silva',cpf:'529.982.247-25',endereco:'Rua Exemplo, 123 - Vila Mariana, São Paulo/SP',telefone:'(11) 90000-0000',email:'maria@exemplo.com.br',
-    imovel: tipo==='residencial' ? 'Rua Exemplo das Flores, 45 - Jardim Brasil' : 'Av. Exemplo Comercial, 1000 - Jardim Brasil',
+    imovel1: tipo==='residencial' ? 'Rua Exemplo das Flores, 45 - Jardim Brasil' : 'Av. Exemplo Comercial, 1000 - Jardim Brasil',
+    imovel2: tipo==='residencial' ? 'Rua Exemplo dos Ipês, 210 - Vila Medeiros' : 'Rua Exemplo do Comércio, 77 - Jardim Japão',
     data:hoje,horaRetirada:now,devolucao:dev,'r:docFormato':'fisico','r:docTipo':'cnh',
     'r:gostou':'sim','r:levouDocs':'sim',
     comodos:'4',pessoas:'3',criancas:'1',vagas:'1','r:pet':'sim','r:independente':'sim',
     qtsM2:'120',finalidade:'Escritório','r:boaLocal':'sim',
     ateValor: tipo==='residencial' ? '2.800,00' : '6.500,00','r:garantia':'seguro',aceite:true});
   { const r=$('padCliente').getBoundingClientRect(); if(r.height) pad.setAspect(r.width/r.height); }
-  pad.setStrokes(exampleSignature()); state.assinadoEm=Date.now(); state.exemplo=true; state.protocolo=newProtocol();
+  syncAddr(true); pad.setStrokes(exampleSignature()); state.assinadoEm=Date.now(); state.exemplo=true; state.protocolo=newProtocol();
   resetUI(); refresh(); writeDraft();
   toast('Exemplo preenchido. Ao salvar o PDF, ele entra na base marcado como exemplo.',{label:'Desfazer',fn:undoTo(snap)});
 }
 function newTerm(){
   const snap=snapshot();
-  form.reset(); apply({}); pad.setStrokes([]); state.assinadoEm=0; state.exemplo=false; state.protocolo=newProtocol();
+  form.reset(); apply({}); syncAddr(true); pad.setStrokes([]); state.assinadoEm=0; state.exemplo=false; state.protocolo=newProtocol();
   resetUI(); setDefaults(); refresh(); writeDraft();
   window.scrollTo({top:0,behavior:'auto'});
   toast('Novo termo nº '+state.protocolo,{label:'Desfazer',fn:undoTo(snap)});
@@ -780,11 +924,11 @@ function buildPDF(){
   ].forEach(r=>row(r));
   y+=3.5;
 
-  const decl=[{ind:7},T('Declaro haver retirado nesta data na '),{t:'A. Rodrigues Imóveis S/S Ltda',f:'bi'},T(', as chaves do(s) imóvel(is) situado(s) à '),V(val('imovel'),40),
+  const decl=[{ind:7},T('Declaro haver retirado nesta data na '),{t:'A. Rodrigues Imóveis S/S Ltda',f:'bi'},T(', as chaves do(s) imóvel(is) situado(s) à '),V(addrText(),40),
     T(', para, única e exclusivamente, visitá-lo com pretensão em locar o mesmo, compromissando-me em devolver as chaves nesta Imobiliária até às '),V(val('devolucao'),6),
     T(' horas deste mesmo dia. Estou ciente de que não sou autorizado a retirar ou deixar qualquer objeto no imóvel, bem como manter posse das chaves após o horário retro mencionado, sob pena de estar incorrendo nos crimes de '),
     {t:'apropriação indébita',u:true},T(' e '),{t:'esbulho possessório',u:true},T(' descritos nos artigos '),L('161'),T(' e '),L('168'),T(' do '),L('Código Penal'),T('.'),
-    {br:true},{ind:7},{t:'Declaro, ainda, haver fornecido cópia digital '},V(docPhrase(),20),T(', ciente que esta documentação permanecerá em arquivo como comprovante da visita e responsabilidade pela devolução da(s) chave(s) recebida(s).')];
+    {br:true},{ind:7},{t:'Declaro, ainda, haver fornecido '},V(docPhrase(),20),T(', ciente que esta documentação permanecerá em arquivo como comprovante da visita e responsabilidade pela devolução da(s) chave(s) recebida(s).')];
   const dm=flow(decl,ML,0,W,{draw:false,size:9.8,lh:4.7}); ensure(dm.h+2);
   flow(decl,ML,y+4,W,{size:9.8,lh:4.7}); y+=dm.h+1.5;
 
@@ -823,7 +967,7 @@ function buildPDF(){
     doc.setFont('helvetica','normal'); doc.setFontSize(7.2); doc.setTextColor(90,90,90);
     doc.text('A. Rodrigues Imóveis S/S Ltda · CRECI 2.054 J · Termo nº '+proto+' · '+stamp,ML,PH-8);
     doc.text('Página '+i+' de '+n,PW-MR,PH-8,{align:'right'}); }
-  doc.setProperties({title:'Termo de Recebimento de Chaves nº '+proto+(nome?' - '+nome:''),author:'A. Rodrigues Imóveis S/S Ltda',subject:'Termo de recebimento de chaves para visita de imóvel '+(TIPOS[tipo]||'').toLowerCase(),keywords:[proto,nome,cpf,val('imovel')].filter(Boolean).join(', '),creator:'Termo de Recebimento de Chaves'});
+  doc.setProperties({title:'Termo de Recebimento de Chaves nº '+proto+(nome?' - '+nome:''),author:'A. Rodrigues Imóveis S/S Ltda',subject:'Termo de recebimento de chaves para visita de imóvel '+(TIPOS[tipo]||'').toLowerCase(),keywords:[proto,nome,cpf,...addrs()].filter(Boolean).join(', '),creator:'Termo de Recebimento de Chaves'});
   try{ doc.setLanguage('pt-BR'); }catch(e){}
   return doc.output('blob');
 }
@@ -862,7 +1006,7 @@ async function onShare(){
   if(!validate()) return;
   let blob; try{ blob=buildPDF(); }catch(e){ toast('Não foi possível gerar o PDF: '+(e&&e.message||e)); return; }
   const reg=registerInBase();
-  const name=fileName(); const text='Termo de Recebimento de Chaves nº '+state.protocolo+' - A. Rodrigues Imóveis'+(val('imovel')?' - Imóvel: '+val('imovel'):'');
+  const name=fileName(); const text='Termo de Recebimento de Chaves nº '+state.protocolo+' - A. Rodrigues Imóveis'+(addrs().length?' - Imóvel: '+addrText():'');
   let file=null; try{ file=new File([blob],name,{type:'application/pdf'}); }catch(e){}
   if(file && navigator.canShare && navigator.share){
     try{ if(navigator.canShare({files:[file]})){ await navigator.share({files:[file],title:name,text}); toast('PDF compartilhado'+baseMsg(reg)); return; } }
@@ -889,7 +1033,10 @@ const XLSX_COLS = [
   ['Telefone/WhatsApp','telefone',18],
   ['E-mail','email',28],
   ['Endereço residencial','endereco',36],
-  ['Imóvel visitado','imovel',36],
+  ['Imóvel visitado 1','imovel1',34],
+  ['Imóvel visitado 2','imovel2',34],
+  ['Imóvel visitado 3','imovel3',34],
+  ['Imóvel visitado 4','imovel4',34],
   ['Hora da retirada','horaRetirada',11],
   ['Devolver até','devolucao',11],
   ['Documento','documento',30],
@@ -922,6 +1069,7 @@ async function buildXLSX(){
   const ws=wb.addWorksheet('Interessados',{views:[{state:'frozen',ySplit:1}]});
   ws.columns=XLSX_COLS.map(c=>({header:c[0],key:c[1],width:c[2],style:c[3]?{numFmt:c[3]}:{}}));
   recs.forEach(r=>{
+    if(r.imovel && !r.imovel1) r.imovel1=r.imovel; /* termos antigos, de um endereço só */
     const o={}; XLSX_COLS.forEach(c=>{ let v=r[c[1]]; if(c[4]==='date') v=xDate(v); else if(c[4]==='ms') v=xStamp(v); o[c[1]]=(v===undefined||v==='')?null:v; });
     ws.addRow(o);
   });
@@ -935,7 +1083,7 @@ function xlsxName(){ return 'Base_Interessados_AR_'+todayISO()+'.xlsx'; }
 /* planilha: inclui o termo atual (se estiver completo) e exporta todos os termos deste tablet */
 async function onExport(share){
   $('sharePanel').hidden=true;
-  const pend=checks(), started=!!(val('nome')||val('imovel')||val('cpf'));
+  const pend=checks(), started=!!(val('nome')||val('imovel1')||val('cpf'));
   let note='';
   if(!pend.length) registerInBase();
   else if(started) note=' O termo atual ainda está incompleto e não entrou.';
