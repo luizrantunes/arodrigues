@@ -32,12 +32,14 @@
   --font-display:"Source Serif 4", Georgia, "Times New Roman", serif;
   --font-body:"Public Sans", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   --r:10px;
+  --chev:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236d6162' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
   color-scheme:light;
 }
 :root[data-theme="dark"]{
   --bg:#1f1e1d; --sheet:#262624; --field:#30302e; --ink:#f5f4ef; --muted:#a6a39a;
   --line:#3e3e3a; --brand:#e0605f; --brand-soft:#3b2b29; --on-brand:#ffffff; --pen:#ffffff;
   --ok:#6fcf97; --warn:#ff8a70; color-scheme:dark;
+  --chev:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23a6a39a' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
 }
 *{box-sizing:border-box}
 [hidden]{display:none!important}
@@ -59,7 +61,7 @@ body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-siz
 @media (max-width:860px){
   .bar{grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"sec theme" "pri pri"}
   .bar-sec,.bar-pri{min-width:0}
-  .bar-sec .btn,.bar-pri .mw{flex:1 1 0;min-width:0}
+  .bar-sec .btn,.bar-pri .mw,.bar-pri > .btn{flex:1 1 0;min-width:0}
   .bar .btn{padding:8px 10px;font-size:.88rem}
 }
 @media (max-width:480px){
@@ -88,8 +90,10 @@ body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-siz
 .mw > .btn{width:100%}
 .btn .caret{width:16px!important;height:16px!important;margin-left:-2px;opacity:.85;transition:transform .15s}
 .btn[aria-expanded="true"] .caret{transform:rotate(180deg)}
-.menu{position:absolute;top:calc(100% + 6px);left:0;z-index:30;width:max(100%,270px);max-width:calc(100vw - 32px);background:var(--sheet);border:1px solid var(--line);border-radius:12px;box-shadow:0 14px 36px rgba(0,0,0,.18);padding:6px;display:flex;flex-direction:column;gap:2px;text-align:left}
+.menu{position:absolute;top:calc(100% + 6px);left:0;z-index:30;width:max(100%,300px);max-width:calc(100vw - 32px);background:var(--sheet);border:1px solid var(--line);border-radius:12px;box-shadow:0 14px 36px rgba(0,0,0,.18);padding:6px;display:flex;flex-direction:column;gap:2px;text-align:left}
 .menu.right{left:auto;right:0}
+.menu-g{font-size:.7rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);padding:8px 12px 2px}
+.menu-g:not(:first-child){border-top:1px solid var(--line);margin-top:4px;padding-top:10px}
 .menu.up{top:auto;bottom:calc(100% + 6px)}
 .menu button{display:flex;align-items:center;gap:12px;width:100%;min-height:56px;padding:10px 12px;border:0;border-radius:8px;background:transparent;color:var(--ink);font:inherit;cursor:pointer;text-align:left}
 .menu button:focus-visible{background:var(--brand-soft);outline:none}
@@ -105,11 +109,11 @@ body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-siz
 .addr-x{flex:none;width:48px;height:48px;border-radius:8px;border:1px solid var(--line);background:transparent;color:var(--muted);display:inline-flex;align-items:center;justify-content:center;cursor:pointer}
 .addr-x svg{width:18px;height:18px}
 @media (hover:hover){.addr-x:hover{border-color:var(--warn);color:var(--warn)}}
-.addr-foot{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:2px}
-.addr-foot .btn svg{width:18px;height:18px}
+.addr-plus{color:var(--brand);border-color:color-mix(in srgb, var(--brand) 45%, var(--line))}
+.addr-plus:disabled{opacity:.4;cursor:not-allowed}
 
 /* Janela do histórico */
-.dlg{width:min(600px,calc(100vw - 32px));max-height:min(80vh,720px);padding:0;border:1px solid var(--line);border-radius:14px;background:var(--sheet);color:var(--ink);box-shadow:0 24px 60px rgba(0,0,0,.3)}
+.dlg{overflow:visible;width:min(600px,calc(100vw - 32px));max-height:min(84vh,760px);padding:0;border:1px solid var(--line);border-radius:14px;background:var(--sheet);color:var(--ink);box-shadow:0 24px 60px rgba(0,0,0,.3)}
 .dlg[open]{display:flex;flex-direction:column}
 .dlg::backdrop{background:rgba(20,16,16,.5)}
 .dlg-h{display:flex;align-items:flex-start;gap:12px;padding:18px 18px 12px}
@@ -119,7 +123,25 @@ body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-siz
 .dlg-x{flex:none;width:44px;height:44px;border-radius:10px;border:1px solid var(--line);background:transparent;color:var(--ink);display:inline-flex;align-items:center;justify-content:center;cursor:pointer}
 .dlg-x svg{width:18px;height:18px}
 #histSearch{margin:0 18px 10px;width:calc(100% - 36px)}
-.hist-list{list-style:none;margin:0;padding:0 10px 12px;overflow-y:auto;display:flex;flex-direction:column;gap:6px}
+.hist-list{list-style:none;margin:0;padding:0 10px 12px;overflow-y:auto;min-height:0;flex:1 1 auto;display:flex;flex-direction:column;gap:6px}
+.hist-row{display:flex;gap:6px;align-items:stretch}
+.hist-row .hist-item{flex:1;min-width:0}
+.hist-del{flex:none;width:48px;border:1px solid var(--line);border-radius:10px;background:var(--field);color:var(--muted);display:inline-flex;align-items:center;justify-content:center;cursor:pointer}
+.hist-del svg{width:20px;height:20px}
+@media (hover:hover){.hist-del:hover{border-color:var(--warn);color:var(--warn)}}
+.dlg-f{display:flex;gap:10px;justify-content:space-between;align-items:center;flex-wrap:wrap;padding:12px 18px 16px;border-top:1px solid var(--line)}
+.dlg-f .btn{min-height:46px;font-size:.92rem}
+.dlg-f .btn svg{width:18px;height:18px}
+.btn.danger,.btn.danger svg{color:var(--warn)!important}
+.dlg-sm{width:min(420px,calc(100vw - 32px))}
+.pw-ico{flex:none;width:40px;height:40px;border-radius:10px;background:var(--brand-soft);color:var(--brand);display:inline-flex;align-items:center;justify-content:center}
+.pw-ico svg{width:20px;height:20px}
+.pw-body{display:flex;flex-direction:column;gap:12px;padding:0 18px 18px}
+.pw-msg{margin:0;color:var(--muted);font-size:.92rem}
+.pw-actions{display:flex;gap:10px;justify-content:flex-end}
+.pw-actions .btn{min-height:46px}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+@media (prefers-reduced-motion: no-preference){.shake{animation:shake .25s 2}}
 .hist-item{display:flex;align-items:center;gap:12px;width:100%;padding:12px;border:1px solid var(--line);border-radius:10px;background:var(--field);color:var(--ink);font:inherit;text-align:left;cursor:pointer}
 @media (hover:hover){.hist-item:hover{border-color:var(--brand)}}
 .hist-item:focus-visible{outline:3px solid color-mix(in srgb, var(--brand) 55%, transparent);outline-offset:2px}
@@ -136,6 +158,7 @@ body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-siz
 .hist-tags{display:flex;gap:6px;flex-wrap:wrap}
 @media (max-width:480px){.hist-item{flex-direction:column;align-items:stretch}.hist-side{flex-direction:row;align-items:center;justify-content:space-between}}
 .dlg .note{margin:0 18px 18px}
+@media (max-width:480px){ .dlg-f > .mw, .dlg-f > .btn{flex:1 1 100%} .dlg-f > .mw .btn{width:100%} }
 
 /* Cabeçalho centralizado */
 .head{display:flex;flex-direction:column;align-items:center;text-align:center;gap:8px;background:var(--sheet);border:1px solid var(--line);border-radius:var(--r);padding:22px 24px 20px;border-top:4px solid var(--brand)}
@@ -166,20 +189,29 @@ body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-siz
 .fold[open] > summary{border-bottom:1px solid var(--line);border-radius:var(--r) var(--r) 0 0}
 .sec-body{padding:18px 20px 20px;display:flex;flex-direction:column;gap:16px}
 
-.grid{display:grid;grid-template-columns:repeat(12, minmax(0,1fr));gap:14px 16px}
+.grid{display:grid;grid-template-columns:repeat(12, minmax(0,1fr));gap:16px;align-items:start}
+.sub{display:contents}
+.grid.cad{align-items:end}
+.cad:not([data-t="residencial"]) .vg{grid-column:span 6}
 .c12{grid-column:span 12}.c8{grid-column:span 8}.c6{grid-column:span 6}.c4{grid-column:span 4}.c3{grid-column:span 3}
-@media (max-width:720px){.c8,.c6{grid-column:span 12}.c4,.c3{grid-column:span 6}}
+@media (max-width:720px){.c8,.c6{grid-column:span 12}.c4,.c3,.cad .vg{grid-column:span 6}}
 @media (max-width:420px){.c4{grid-column:span 12}}
 
 .f{display:flex;flex-direction:column;gap:6px;min-width:0}
+.f > label, .f > .lbl{min-height:1.25em}
 .f > label, .lbl{font-size:.86rem;font-weight:600;color:var(--ink)}
 .err{font-size:.8rem;color:var(--warn);font-weight:600}
 .hint-s{font-size:.8rem;color:var(--muted)}
 .note{margin:0;color:var(--muted);font-size:.92rem;padding:12px 14px;border:1px dashed var(--line);border-radius:8px;text-align:center}
 .req::after{content:" *";color:var(--brand)}
-input[type=text],input[type=email],input[type=tel],input[type=date],input[type=time],input[type=number],input[type=search],textarea{
+input[type=text],input[type=email],input[type=tel],input[type=date],input[type=time],input[type=number],input[type=search],input[type=password],textarea{
   width:100%;min-height:48px;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--field);color:var(--pen);
   font:500 1rem var(--font-body)}
+select{width:100%;min-height:48px;padding:10px 40px 10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--field) var(--chev) no-repeat right 12px center/18px 18px;color:var(--pen);font:500 1rem var(--font-body);appearance:none;-webkit-appearance:none;cursor:pointer}
+select.empty{color:var(--muted);font-weight:400}
+select option{color:var(--ink);background:var(--sheet)}
+select:focus-visible{outline:3px solid color-mix(in srgb, var(--brand) 55%, transparent);outline-offset:2px}
+.invalid select,.invalid .dd{border-color:var(--warn)}
 input::placeholder,textarea::placeholder{color:var(--muted);opacity:.75;font-weight:400}
 input:focus-visible,textarea:focus-visible,button:focus-visible,summary:focus-visible,.opt input:focus-visible + span{outline:3px solid color-mix(in srgb, var(--brand) 55%, transparent);outline-offset:2px}
 .invalid input,.invalid textarea,input.invalid{border-color:var(--warn)}
@@ -204,6 +236,23 @@ input:focus-visible,textarea:focus-visible,button:focus-visible,summary:focus-vi
 .opt.big span{width:100%;min-height:68px;justify-content:center;font-size:1.08rem;font-weight:600;gap:12px}
 .opt.big svg{width:26px;height:26px;flex:none;color:var(--muted)}
 .opt.big input:checked + span svg{color:var(--brand)}
+
+/* Lista suspensa de múltipla escolha (motivos) */
+.ms{position:relative}
+.dd{width:100%;min-height:48px;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--field);color:var(--pen);font:500 1rem var(--font-body);cursor:pointer;text-align:left}
+.dd > span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dd > span.ph{color:var(--muted);font-weight:400}
+.dd-caret{flex:none;width:18px;height:18px;color:var(--muted);transition:transform .15s}
+.dd[aria-expanded="true"] .dd-caret{transform:rotate(180deg)}
+.ms-panel{position:absolute;left:0;right:0;top:calc(100% + 6px);z-index:25;background:var(--sheet);border:1px solid var(--line);border-radius:10px;box-shadow:0 14px 36px rgba(0,0,0,.18);padding:6px;max-height:min(62vh,440px);overflow-y:auto;overscroll-behavior:contain}
+.m-list{display:flex;flex-direction:column}
+.ck{display:flex;align-items:center;gap:12px;min-height:46px;padding:8px 10px;border-radius:8px;cursor:pointer;font-size:.96rem;color:var(--ink)}
+.ck input{width:20px;height:20px;margin:0;flex:none;accent-color:var(--brand);cursor:pointer}
+.ck:has(input:checked){background:var(--brand-soft)}
+@media (hover:hover){.ck:hover{background:var(--brand-soft)}}
+.m-txt{margin:4px 10px 8px;width:calc(100% - 20px)!important;scroll-margin-bottom:72px}
+.ms-foot{position:sticky;bottom:-6px;display:flex;justify-content:flex-end;padding:8px 4px 4px;margin-top:4px;background:var(--sheet);border-top:1px solid var(--line)}
+.decl-lbl{margin:0 0 -6px}
 
 /* Declaração */
 .decl{background:var(--field);border:1px solid var(--line);border-radius:8px;padding:16px 18px;font-size:.98rem;line-height:1.6}
@@ -265,8 +314,8 @@ input:focus-visible,textarea:focus-visible,button:focus-visible,summary:focus-vi
       <button type="button" class="btn quiet js-example"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.8 4.7 4.7 1.8-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z"/><path d="M19 15v4M17 17h4"/></svg><span class="t-long">Termo exemplo</span><span class="t-short">Exemplo</span></button>
     </div>
     <div class="bar-pri">
-      <div class="mw"><button type="button" class="btn js-menu" aria-haspopup="menu" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>Salvar<svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button><div class="menu" role="menu" aria-label="Salvar" hidden><button type="button" role="menuitem" data-act="save-pdf"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/></svg><span><b>PDF do termo</b><small>Termo assinado deste cliente</small></span></button><button type="button" role="menuitem" data-act="save-xlsx"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18"/></svg><span><b>Planilha Excel</b><small>Todos os termos deste tablet</small></span></button></div></div>
-      <div class="mw"><button type="button" class="btn ghost js-menu" aria-haspopup="menu" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4"/><path d="m15.4 6.5-6.8 4"/></svg>Compartilhar<svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button><div class="menu right" role="menu" aria-label="Compartilhar" hidden><button type="button" role="menuitem" data-act="share-pdf"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/></svg><span><b>PDF do termo</b><small>Termo assinado deste cliente</small></span></button><button type="button" role="menuitem" data-act="share-xlsx"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18"/></svg><span><b>Planilha Excel</b><small>Todos os termos deste tablet</small></span></button></div></div>
+      <button type="button" class="btn js-save" title="Salvar o termo no histórico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 3h11l5 5v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M7 3v5h8"/><path d="M7 21v-7h10v7"/></svg>Salvar</button>
+      <div class="mw"><button type="button" class="btn ghost js-menu" aria-haspopup="menu" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4"/><path d="m15.4 6.5-6.8 4"/></svg>Compartilhar<svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button><div class="menu right" role="menu" aria-label="Compartilhar" hidden><div class="menu-g">Salvar no dispositivo</div><button type="button" role="menuitem" data-act="dev-pdf"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/></svg><span><b>PDF do termo</b><small>Termo assinado deste cliente</small></span></button><button type="button" role="menuitem" data-act="dev-xlsx"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18"/></svg><span><b>Planilha Excel</b><small>Uma linha com os dados deste termo</small></span></button><div class="menu-g">Compartilhar</div><button type="button" role="menuitem" data-act="share-pdf"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/></svg><span><b>PDF do termo</b><small>WhatsApp, e-mail ou outro aplicativo</small></span></button><button type="button" role="menuitem" data-act="share-xlsx"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18"/></svg><span><b>Planilha Excel</b><small>WhatsApp, e-mail ou outro aplicativo</small></span></button></div></div>
     </div>
     <button type="button" class="theme" id="btnTheme" aria-label="Mudar para o modo escuro" title="Mudar para o modo escuro">
       <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.2M12 19.8V22M4.9 4.9l1.6 1.6M17.5 17.5l1.6 1.6M2 12h2.2M19.8 12H22M4.9 19.1l1.6-1.6M17.5 6.5l1.6-1.6"/></svg>
@@ -310,28 +359,15 @@ input:focus-visible,textarea:focus-visible,button:focus-visible,summary:focus-vi
         </div>
       </div>
       <div class="f c12" id="imoveisBox"><label for="imovel1" class="req">Endereço do(s) imóvel(is) que vai visitar</label>
-        <div class="addr-list"><div class="addr" data-i="1"><input type="text" id="imovel1" autocapitalize="words" placeholder="Rua, número, bairro"></div><div class="addr" data-i="2" hidden><input type="text" id="imovel2" autocapitalize="words" placeholder="2º endereço: rua, número, bairro" aria-label="2º endereço"><button type="button" class="addr-x" data-rm="2" aria-label="Remover 2º endereço" title="Remover endereço"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div><div class="addr" data-i="3" hidden><input type="text" id="imovel3" autocapitalize="words" placeholder="3º endereço: rua, número, bairro" aria-label="3º endereço"><button type="button" class="addr-x" data-rm="3" aria-label="Remover 3º endereço" title="Remover endereço"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div><div class="addr" data-i="4" hidden><input type="text" id="imovel4" autocapitalize="words" placeholder="4º endereço: rua, número, bairro" aria-label="4º endereço"><button type="button" class="addr-x" data-rm="4" aria-label="Remover 4º endereço" title="Remover endereço"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div></div>
-        <div class="addr-foot"><button type="button" class="btn small quiet" id="addrAdd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Adicionar endereço</button><span class="hint-s" id="addrCount">1 de 4</span></div>
+        <div class="addr-list"><div class="addr" data-i="1"><input type="text" id="imovel1" autocapitalize="words" placeholder="Rua, número, bairro"><button type="button" class="addr-x addr-plus" id="addrAdd" aria-label="Adicionar outro endereço" title="Adicionar endereço (até 4)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></div><div class="addr" data-i="2" hidden><input type="text" id="imovel2" autocapitalize="words" placeholder="2º endereço: rua, número, bairro" aria-label="2º endereço"><button type="button" class="addr-x" data-rm="2" aria-label="Remover 2º endereço" title="Remover endereço"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div><div class="addr" data-i="3" hidden><input type="text" id="imovel3" autocapitalize="words" placeholder="3º endereço: rua, número, bairro" aria-label="3º endereço"><button type="button" class="addr-x" data-rm="3" aria-label="Remover 3º endereço" title="Remover endereço"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div><div class="addr" data-i="4" hidden><input type="text" id="imovel4" autocapitalize="words" placeholder="4º endereço: rua, número, bairro" aria-label="4º endereço"><button type="button" class="addr-x" data-rm="4" aria-label="Remover 4º endereço" title="Remover endereço"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div></div>
       </div>
       <div class="f c4"><label for="data" class="req">Data</label><input type="date" id="data"></div>
       <div class="f c4"><label for="horaRetirada" class="req">Hora da retirada</label><input type="time" id="horaRetirada"></div>
       <div class="f c4"><label for="devolucao" class="req">Devolver as chaves até</label><input type="time" id="devolucao"></div>
-      <div class="f c12" id="docFormatoBox"><span class="lbl req">Documento apresentado</span>
-        <div class="opts" role="radiogroup" aria-label="Formato do documento"><label class="opt"><input type="radio" name="docFormato" value="fisico"><span>Físico</span></label><label class="opt"><input type="radio" name="docFormato" value="digital"><span>Digital</span></label></div>
-      </div>
-      <div class="f c12" id="docTipoBox"><span class="lbl req">Qual documento</span>
-        <div class="opts" role="radiogroup" aria-label="Qual documento">
-          <label class="opt" data-doc="rg"><input type="radio" name="docTipo" value="rg"><span>RG</span></label>
-          <label class="opt" data-doc="cnh"><input type="radio" name="docTipo" value="cnh"><span>CNH</span></label>
-          <label class="opt" data-doc="conselho"><input type="radio" name="docTipo" value="conselho"><span>Carteira de conselho profissional</span></label>
-          <label class="opt" data-doc="rne"><input type="radio" name="docTipo" value="rne"><span>RNE</span></label>
-          <label class="opt" data-doc="ctps"><input type="radio" name="docTipo" value="ctps"><span>Carteira de trabalho</span></label>
-          <label class="opt" data-doc="passaporte"><input type="radio" name="docTipo" value="passaporte"><span>Passaporte</span></label>
-        </div>
-        <span class="hint-s" id="docHint" hidden>RNE e passaporte aparecem só no formato físico.</span>
-      </div>
+      <div class="f c4" id="docFormatoBox"><label for="docFormato" class="req">Documento apresentado</label><select id="docFormato" name="docFormato"><option value="">Selecione</option><option value="fisico">Físico</option><option value="digital">Digital</option></select></div>
+      <div class="f c8" id="docTipoBox"><label for="docTipo" class="req">Qual documento</label><select id="docTipo" name="docTipo"><option value="">Selecione</option><option value="rg">RG</option><option value="cnh">CNH</option><option value="conselho">Carteira de conselho profissional</option><option value="rne">RNE</option><option value="ctps">Carteira de trabalho</option><option value="passaporte">Passaporte</option></select><span class="hint-s" id="docHint" hidden>RNE e passaporte existem só no formato físico.</span></div>
     </div>
-    <p class="lbl" style="margin:4px 0 -6px">Leia a declaração</p>
+    <p class="lbl decl-lbl">Leia a declaração</p>
     <div class="decl" id="declText" aria-live="polite"></div>
     </div>
   </details>
@@ -352,27 +388,26 @@ input:focus-visible,textarea:focus-visible,button:focus-visible,summary:focus-vi
   <details class="sec fold" id="s-cad" open>
     <summary><span class="st"><h2>Seu interesse no imóvel</h2><span class="hint">Opcional</span></span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
     <div class="sec-body">
-    <div class="grid">
-      <div class="f c6"><span class="lbl">Gostou do imóvel?</span><div class="opts"><label class="opt"><input type="radio" name="gostou" value="sim"><span>Sim</span></label><label class="opt"><input type="radio" name="gostou" value="nao"><span>Não</span></label></div></div>
-      <div class="f c6"><span class="lbl">Levou a relação de documentos?</span><div class="opts"><label class="opt"><input type="radio" name="levouDocs" value="sim"><span>Sim</span></label><label class="opt"><input type="radio" name="levouDocs" value="nao"><span>Não</span></label></div></div>
-    </div>
-    <p class="note" id="tipoNote">Escolha o tipo de imóvel em "Retirada das chaves" para ver as demais perguntas.</p>
-    <div class="grid" data-tipo="residencial" hidden>
-      <div class="f c3"><label for="comodos">Quantos cômodos</label><input type="number" id="comodos" inputmode="numeric" min="0"></div>
-      <div class="f c3"><label for="pessoas">Para quantas pessoas</label><input type="number" id="pessoas" inputmode="numeric" min="0"></div>
-      <div class="f c3"><label for="criancas">Crianças (quantas)</label><input type="number" id="criancas" inputmode="numeric" min="0"></div>
-      <div class="f c3"><label for="vagas">Vagas de garagem</label><input type="number" id="vagas" inputmode="numeric" min="0"></div>
-      <div class="f c6"><span class="lbl">Tem pet?</span><div class="opts"><label class="opt"><input type="radio" name="pet" value="sim"><span>Sim</span></label><label class="opt"><input type="radio" name="pet" value="nao"><span>Não</span></label></div></div>
-      <div class="f c6"><span class="lbl">Imóvel independente?</span><div class="opts"><label class="opt"><input type="radio" name="independente" value="sim"><span>Sim</span></label><label class="opt"><input type="radio" name="independente" value="nao"><span>Não</span></label></div></div>
-    </div>
-    <div class="grid" data-tipo="comercial" hidden>
-      <div class="f c4"><label for="qtsM2">Área desejada (m²)</label><input type="number" id="qtsM2" inputmode="decimal" min="0" placeholder="Ex.: 120"></div>
-      <div class="f c4"><label for="finalidade">Finalidade</label><input type="text" id="finalidade" placeholder="Ex.: escritório, loja"></div>
-      <div class="f c4"><span class="lbl">Precisa de boa localização?</span><div class="opts"><label class="opt"><input type="radio" name="boaLocal" value="sim"><span>Sim</span></label><label class="opt"><input type="radio" name="boaLocal" value="nao"><span>Não</span></label></div></div>
-    </div>
-    <div class="grid">
-      <div class="f c4"><label for="ateValor">Valor máximo de aluguel</label><div class="money"><input type="text" id="ateValor" class="m" inputmode="numeric" placeholder="0,00"></div></div>
-      <div class="f c8"><span class="lbl">Tipo de garantia</span><div class="opts"><label class="opt"><input type="radio" name="garantia" value="fiador"><span>Fiador</span></label><label class="opt"><input type="radio" name="garantia" value="seguro"><span>Seguro fiança</span></label><label class="opt"><input type="radio" name="garantia" value="caucao"><span>Depósito caução</span></label></div></div>
+    <div class="grid cad" id="cadGrid">
+      <div class="f c6"><label for="gostou">Gostou do imóvel?</label><select id="gostou" name="gostou"><option value="">Selecione</option><option value="sim">Sim</option><option value="nao">Não</option></select></div>
+      <div class="f c6"><label for="levouDocs">Levou a relação de documentos?</label><select id="levouDocs" name="levouDocs"><option value="">Selecione</option><option value="sim">Sim</option><option value="nao">Não</option></select></div>
+      <div class="f c12" id="motivosBox" hidden><span class="lbl req" id="motivosLbl">Por que não gostou?</span><div class="ms" id="motivosMs"><button type="button" class="dd" id="motivosBtn" aria-haspopup="true" aria-expanded="false" aria-controls="motivosPanel" aria-labelledby="motivosLbl motivosSum"><span id="motivosSum" class="ph">Selecione um ou mais motivos</span><svg class="dd-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button><div class="ms-panel" id="motivosPanel" hidden><div class="m-list" data-tipo-m="residencial" hidden><label class="ck"><input type="checkbox" id="mr1"><span>Conservação ruim</span></label><label class="ck"><input type="checkbox" id="mr2"><span>Falta de independência, vizinhos inadequados</span></label><label class="ck"><input type="checkbox" id="mr3"><span>Tamanho dos cômodos</span></label><label class="ck"><input type="checkbox" id="mr4"><span>Má distribuição, falta de garagem/quintal</span></label><label class="ck"><input type="checkbox" id="mr5"><span>Preço/negociação de valor desvantajosa</span></label><label class="ck"><input type="checkbox" id="mr6"><span>Garantia locatícia desvantajosa</span></label><label class="ck"><input type="checkbox" id="mr7"><span>Localização ruim</span></label><label class="ck"><input type="checkbox" id="mr8"><span>Restrição a ocupação: crianças, animais, uso não residencial</span></label><label class="ck"><input type="checkbox" id="mr9"><span>Certeza de recusa cadastral para o local</span></label><label class="ck"><input type="checkbox" id="mrOutro"><span>Outros</span></label><input type="text" id="mrOutroTxt" class="m-txt" placeholder="Descreva o motivo" aria-label="Outro motivo" hidden></div><div class="m-list" data-tipo-m="comercial" hidden><label class="ck"><input type="checkbox" id="mc1"><span>Conservação ruim</span></label><label class="ck"><input type="checkbox" id="mc2"><span>Localização inadequada</span></label><label class="ck"><input type="checkbox" id="mc3"><span>Garantia locatícia desvantajosa</span></label><label class="ck"><input type="checkbox" id="mc4"><span>Preço/negociação desvantajosos</span></label><label class="ck"><input type="checkbox" id="mc5"><span>Certeza de recusa cadastral</span></label><label class="ck"><input type="checkbox" id="mc6"><span>Restrição a uso</span></label><label class="ck"><input type="checkbox" id="mc7"><span>Ambiente comercial ruim/falta de acesso privativo</span></label><label class="ck"><input type="checkbox" id="mc8"><span>Documentação predial inadequada</span></label><label class="ck"><input type="checkbox" id="mc9"><span>Disposição de espaço/instalações inadequadas</span></label><label class="ck"><input type="checkbox" id="mcOutro"><span>Outros</span></label><input type="text" id="mcOutroTxt" class="m-txt" placeholder="Descreva o motivo" aria-label="Outro motivo" hidden></div><div class="ms-foot"><button type="button" class="btn small" id="motivosOk">Concluir</button></div></div></div></div>
+      <p class="note c12" id="tipoNote">Escolha o tipo de imóvel em "Retirada das chaves" para ver as demais perguntas.</p>
+      <div class="sub" data-tipo="residencial" hidden>
+        <div class="f c3"><label for="comodos">Quantos cômodos</label><input type="number" id="comodos" inputmode="numeric" min="0"></div>
+        <div class="f c3"><label for="pessoas">Para quantas pessoas</label><input type="number" id="pessoas" inputmode="numeric" min="0"></div>
+        <div class="f c3"><label for="criancas">Crianças (quantas)</label><input type="number" id="criancas" inputmode="numeric" min="0"></div>
+        <div class="f c3"><label for="vagas">Vagas de garagem</label><input type="number" id="vagas" inputmode="numeric" min="0"></div>
+        <div class="f c3"><label for="pet">Tem pet?</label><select id="pet" name="pet"><option value="">Selecione</option><option value="sim">Sim</option><option value="nao">Não</option></select></div>
+        <div class="f c3"><label for="independente">Imóvel independente?</label><select id="independente" name="independente"><option value="">Selecione</option><option value="sim">Sim</option><option value="nao">Não</option></select></div>
+      </div>
+      <div class="sub" data-tipo="comercial" hidden>
+        <div class="f c6"><label for="finalidade">Finalidade</label><input type="text" id="finalidade" placeholder="Ex.: escritório, loja"></div>
+        <div class="f c3"><label for="qtsM2">Área desejada (m²)</label><input type="number" id="qtsM2" inputmode="decimal" min="0" placeholder="Ex.: 120"></div>
+        <div class="f c3"><label for="boaLocal">Precisa de boa localização?</label><select id="boaLocal" name="boaLocal"><option value="">Selecione</option><option value="sim">Sim</option><option value="nao">Não</option></select></div>
+      </div>
+      <div class="f c3 vg"><label for="ateValor">Valor máximo de aluguel</label><div class="money"><input type="text" id="ateValor" class="m" inputmode="numeric" placeholder="0,00"></div></div>
+      <div class="f c3 vg"><label for="garantia">Tipo de garantia</label><select id="garantia" name="garantia"><option value="">Selecione</option><option value="fiador">Fiador</option><option value="seguro">Seguro fiança</option><option value="caucao">Depósito caução</option></select></div>
     </div>
     </div>
   </details>
@@ -383,8 +418,8 @@ input:focus-visible,textarea:focus-visible,button:focus-visible,summary:focus-vi
     <div class="alert" id="errors" hidden></div>
     <div class="bar foot">
       <div class="bar-pri">
-        <div class="mw"><button type="button" class="btn js-menu" aria-haspopup="menu" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>Salvar<svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button><div class="menu up" role="menu" aria-label="Salvar" hidden><button type="button" role="menuitem" data-act="save-pdf"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/></svg><span><b>PDF do termo</b><small>Termo assinado deste cliente</small></span></button><button type="button" role="menuitem" data-act="save-xlsx"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18"/></svg><span><b>Planilha Excel</b><small>Todos os termos deste tablet</small></span></button></div></div>
-        <div class="mw"><button type="button" class="btn ghost js-menu" aria-haspopup="menu" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4"/><path d="m15.4 6.5-6.8 4"/></svg>Compartilhar<svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button><div class="menu right up" role="menu" aria-label="Compartilhar" hidden><button type="button" role="menuitem" data-act="share-pdf"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/></svg><span><b>PDF do termo</b><small>Termo assinado deste cliente</small></span></button><button type="button" role="menuitem" data-act="share-xlsx"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18"/></svg><span><b>Planilha Excel</b><small>Todos os termos deste tablet</small></span></button></div></div>
+        <button type="button" class="btn js-save" title="Salvar o termo no histórico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 3h11l5 5v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M7 3v5h8"/><path d="M7 21v-7h10v7"/></svg>Salvar</button>
+        <div class="mw"><button type="button" class="btn ghost js-menu" aria-haspopup="menu" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4"/><path d="m15.4 6.5-6.8 4"/></svg>Compartilhar<svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button><div class="menu right up" role="menu" aria-label="Compartilhar" hidden><div class="menu-g">Salvar no dispositivo</div><button type="button" role="menuitem" data-act="dev-pdf"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/></svg><span><b>PDF do termo</b><small>Termo assinado deste cliente</small></span></button><button type="button" role="menuitem" data-act="dev-xlsx"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18"/></svg><span><b>Planilha Excel</b><small>Uma linha com os dados deste termo</small></span></button><div class="menu-g">Compartilhar</div><button type="button" role="menuitem" data-act="share-pdf"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/></svg><span><b>PDF do termo</b><small>WhatsApp, e-mail ou outro aplicativo</small></span></button><button type="button" role="menuitem" data-act="share-xlsx"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18"/></svg><span><b>Planilha Excel</b><small>WhatsApp, e-mail ou outro aplicativo</small></span></button></div></div>
       </div>
       <div class="bar-sec">
         <button type="button" class="btn quiet js-new"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span class="nl">Novo termo</span><span class="ns">Novo</span></button>
@@ -405,10 +440,22 @@ input:focus-visible,textarea:focus-visible,button:focus-visible,summary:focus-vi
   </form>
 </div>
 <dialog class="dlg" id="histDlg" aria-labelledby="histTitle">
-  <div class="dlg-h"><div class="st"><h2 id="histTitle">Histórico</h2><span class="hint">Termos salvos neste tablet nos últimos 7 dias</span></div><button type="button" class="dlg-x" id="histClose" aria-label="Fechar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+  <div class="dlg-h"><div class="st"><h2 id="histTitle">Histórico</h2><span class="hint" id="histCount">Termos salvos neste tablet</span></div><button type="button" class="dlg-x" id="histClose" aria-label="Fechar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
   <input type="search" id="histSearch" placeholder="Buscar por nome, CPF ou nº do termo" autocomplete="off" aria-label="Buscar no histórico">
   <ul class="hist-list" id="histList"></ul>
   <p class="note" id="histEmpty" hidden></p>
+  <div class="dlg-f" id="histFoot"><div class="mw"><button type="button" class="btn ghost js-menu" aria-haspopup="menu" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4"/><path d="m15.4 6.5-6.8 4"/></svg>Compartilhar todos<svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button><div class="menu up" role="menu" aria-label="Compartilhar todos" hidden><div class="menu-g">Salvar no dispositivo</div><button type="button" role="menuitem" data-act="all-dev-pdf"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/></svg><span><b>PDF de todos</b><small>Um PDF com uma página por cliente</small></span></button><button type="button" role="menuitem" data-act="all-dev-xlsx"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18"/></svg><span><b>Planilha Excel</b><small>Uma linha por cliente</small></span></button><div class="menu-g">Compartilhar</div><button type="button" role="menuitem" data-act="all-share-pdf"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/></svg><span><b>PDF de todos</b><small>WhatsApp, e-mail ou outro aplicativo</small></span></button><button type="button" role="menuitem" data-act="all-share-xlsx"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18"/></svg><span><b>Planilha Excel</b><small>WhatsApp, e-mail ou outro aplicativo</small></span></button></div></div><button type="button" class="btn quiet danger" id="histClearAll"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M6 6l1 14h10l1-14"/><path d="M10 11v6M14 11v6"/></svg>Apagar histórico</button></div>
+</dialog>
+<dialog class="dlg dlg-sm" id="pwDlg" aria-labelledby="pwTitle">
+  <div id="pwForm">
+    <div class="dlg-h"><span class="pw-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></span><div class="st"><h2 id="pwTitle">Senha de administrador</h2></div></div>
+    <div class="pw-body">
+      <p class="pw-msg" id="pwMsg"></p>
+      <input type="password" id="pwInput" autocomplete="off" placeholder="Digite a senha" aria-label="Senha de administrador">
+      <span class="err" id="pwErr" role="alert" hidden>Senha incorreta. Tente de novo.</span>
+      <div class="pw-actions"><button type="button" class="btn quiet" id="pwCancel">Cancelar</button><button type="button" class="btn" id="pwOk">Confirmar</button></div>
+    </div>
+  </div>
 </dialog>
 <div class="toast" id="toast" role="status" aria-live="polite" hidden><span id="toastMsg"></span><button type="button" id="toastBtn" hidden></button></div>
 
@@ -449,6 +496,8 @@ const DOCS = {
   passaporte: { nome:'Passaporte', art:'o', fem:false, digital:false }
 };
 const SN  = { sim:'Sim', nao:'Não' };
+const MOTIVOS = {"residencial": ["Conservação ruim", "Falta de independência, vizinhos inadequados", "Tamanho dos cômodos", "Má distribuição, falta de garagem/quintal", "Preço/negociação de valor desvantajosa", "Garantia locatícia desvantajosa", "Localização ruim", "Restrição a ocupação: crianças, animais, uso não residencial", "Certeza de recusa cadastral para o local"], "comercial": ["Conservação ruim", "Localização inadequada", "Garantia locatícia desvantajosa", "Preço/negociação desvantajosos", "Certeza de recusa cadastral", "Restrição a uso", "Ambiente comercial ruim/falta de acesso privativo", "Documentação predial inadequada", "Disposição de espaço/instalações inadequadas"]};
+const MPRE = { residencial:'mr', comercial:'mc' };
 const GAR = { fiador:'Fiador', seguro:'Seguro fiança', caucao:'Depósito caução' };
 
 /* ---------- utilidades ---------- */
@@ -477,6 +526,7 @@ function newProtocol(){ const d=new Date(), abc='ABCDEFGHJKLMNPQRSTUVWXYZ2345678
 let toastT;
 function toast(msg, action){
   const t=$('toast'), b=$('toastBtn'); $('toastMsg').textContent=msg;
+  const host=['pwDlg','histDlg'].map(id=>$(id)).find(d=>d&&d.open)||document.body; if(t.parentNode!==host) host.appendChild(t);
   if(action){ b.textContent=action.label; b.hidden=false; b.onclick=()=>{ t.hidden=true; action.fn(); }; t.classList.add('has-action'); }
   else { b.hidden=true; b.onclick=null; t.classList.remove('has-action'); }
   t.hidden=false; clearTimeout(toastT); toastT=setTimeout(()=>t.hidden=true, action?7000:3600);
@@ -485,7 +535,7 @@ function toast(msg, action){
 /* ---------- leitura dos campos ---------- */
 const val = id => ($(id).value||'').trim();
 const chk = id => $(id).checked;
-const rad = name => { const r=form.querySelector('input[name="'+name+'"]:checked'); return r?r.value:''; };
+const rad = name => { const el=document.getElementById(name); if(el && el.tagName==='SELECT') return el.value; const r=form.querySelector('input[name="'+name+'"]:checked'); return r?r.value:''; };
 
 /* documento: "a CNH física", "o RG digital" */
 function docPhrase(){
@@ -501,8 +551,7 @@ function addrText(){ const a=addrs(); return a.length<=1 ? (a[0]||'') : a.slice(
 function syncAddr(fromValues){
   if(fromValues){ addrN=1; for(let i=MAX_ADDR;i>1;i--){ if(val('imovel'+i)){ addrN=i; break; } } }
   all('#imoveisBox .addr').forEach(r=>{ r.hidden = +r.dataset.i > addrN; });
-  $('addrAdd').hidden = addrN>=MAX_ADDR;
-  $('addrCount').textContent = addrN+' de '+MAX_ADDR;
+  $('addrAdd').disabled = addrN>=MAX_ADDR;
 }
 $('addrAdd').addEventListener('click',()=>{ if(addrN>=MAX_ADDR) return; addrN++; syncAddr(); $('imovel'+addrN).focus(); saveDraft(); });
 $('imoveisBox').addEventListener('click',e=>{
@@ -514,20 +563,43 @@ $('imoveisBox').addEventListener('click',e=>{
 /* ---------- estado do termo ---------- */
 const state = { protocolo:'', exemplo:false, assinadoEm:0 };
 
+/* ---------- motivos de não ter gostado (múltipla escolha + "Outros") ---------- */
+let motivosOpen=false;
+function motivosSel(){
+  const t=rad('tipo'); if(rad('gostou')!=='nao' || !t) return [];
+  const pre=MPRE[t], out=MOTIVOS[t].filter((_,i)=>chk(pre+(i+1)));
+  if(chk(pre+'Outro')) out.push('Outro'+(val(pre+'OutroTxt')?' ('+val(pre+'OutroTxt')+')':''));
+  return out;
+}
+function applyMotivos(){
+  const t=rad('tipo'), show=rad('gostou')==='nao' && !!t;
+  $('motivosBox').hidden=!show; if(!show){ motivosOpen=false; }
+  all('[data-tipo-m]').forEach(l=>l.hidden=l.dataset.tipoM!==t);
+  ['mr','mc'].forEach(pre=>{ $(pre+'OutroTxt').hidden=!chk(pre+'Outro'); });
+  $('motivosPanel').hidden=!(show && motivosOpen); $('motivosBtn').setAttribute('aria-expanded',String(show && motivosOpen));
+  const sel=motivosSel(), sum=$('motivosSum');
+  sum.textContent = sel.length ? sel.join('; ') : 'Selecione um ou mais motivos';
+  sum.className = sel.length ? '' : 'ph';
+}
+function setMotivos(open){ motivosOpen=open; applyMotivos(); }
+$('motivosBtn').addEventListener('click',e=>{ e.stopPropagation(); setMotivos(!motivosOpen); });
+$('motivosOk').addEventListener('click',()=>{ setMotivos(false); $('motivosBtn').focus({preventScroll:true}); });
+document.addEventListener('click',e=>{ if(motivosOpen && !$('motivosMs').contains(e.target)) setMotivos(false); });
+document.addEventListener('keydown',e=>{ if(e.key==='Escape' && motivosOpen){ setMotivos(false); $('motivosBtn').focus({preventScroll:true}); } });
+
 /* ---------- tipo de imóvel e filtro de documentos ---------- */
 function applyTipo(){
   const t=rad('tipo');
   all('[data-tipo]').forEach(el=>el.hidden = el.dataset.tipo!==t);
+  if(t) $('cadGrid').dataset.t=t; else delete $('cadGrid').dataset.t;
   $('tipoNote').hidden = !!t;
   $('titulo').textContent='Termo de Recebimento de Chaves para Visita de Imóvel'+(t?' '+TIPOS[t]:'');
 }
 function applyDocFilter(){
-  const digital = rad('docFormato')==='digital';
-  all('#docTipoBox [data-doc]').forEach(l=>{
-    const ok = !digital || DOCS[l.dataset.doc].digital;
-    l.hidden=!ok; if(!ok){ const r=l.querySelector('input'); if(r.checked) r.checked=false; }
-  });
+  const digital = rad('docFormato')==='digital', sel=$('docTipo');
+  [...sel.options].forEach(o=>{ if(!o.value) return; const ok=!digital || DOCS[o.value].digital; o.hidden=!ok; o.disabled=!ok; if(!ok && o.selected) sel.value=''; });
   $('docHint').hidden=!digital;
+  all('#form select').forEach(x=>x.classList.toggle('empty',!x.value));
 }
 
 /* ---------- declaração ao vivo ---------- */
@@ -623,7 +695,7 @@ new MutationObserver(()=>pad.redraw()).observe(document.documentElement,{attribu
 /* ---------- validação ---------- */
 const touched={}; let showAll=false;
 const GROUP_BOX = { tipo:'tipoBox', docFormato:'docFormatoBox', docTipo:'docTipoBox' };
-const VALIDATED = ['nome','cpf','telefone','email','tipoBox','imovel1','data','horaRetirada','devolucao','docFormatoBox','docTipoBox','aceite','padCliente'];
+const VALIDATED = ['nome','cpf','telefone','email','tipoBox','imovel1','data','horaRetirada','devolucao','docFormatoBox','docTipoBox','motivosBox','aceite','padCliente'];
 function checks(){
   const p=[]; const add=(id,label,msg)=>p.push({id,label,msg});
   if(!val('nome')) add('nome','Nome completo','Informe o nome completo.');
@@ -639,6 +711,11 @@ function checks(){
   else if(hr && dv<=hr) add('devolucao','Horário de devolução','A devolução precisa ser depois da retirada ('+hr+').');
   if(!rad('docFormato')) add('docFormatoBox','Documento físico ou digital','Escolha se o documento é físico ou digital.');
   if(!rad('docTipo')) add('docTipoBox','Qual documento','Escolha qual documento foi apresentado.');
+  if(rad('gostou')==='nao' && rad('tipo')){
+    const pre=MPRE[rad('tipo')], any=MOTIVOS[rad('tipo')].some((_,i)=>chk(pre+(i+1)))||chk(pre+'Outro');
+    if(!any) add('motivosBox','Motivo de não ter gostado','Escolha pelo menos um motivo.');
+    else if(chk(pre+'Outro') && !val(pre+'OutroTxt')) add('motivosBox','Outro motivo','Descreva o outro motivo.');
+  }
   if(!chk('aceite')) add('aceite','Concordância com a declaração','Marque que leu e concorda com a declaração.');
   if(pad.isEmpty()) add('padCliente','Assinatura do cliente','Assine no quadro acima.');
   return p;
@@ -655,15 +732,15 @@ function paintErrors(list){
   });
 }
 function refresh(){
-  applyTipo(); applyDocFilter(); renderDecl();
+  applyTipo(); applyDocFilter(); applyMotivos(); renderDecl();
   const list=checks(); paintErrors(list);
   if(!$('errors').hidden){ if(list.length) renderErrorList(list); else $('errors').hidden=true; }
   return list;
 }
-function goTo(id){ const box=fieldBox(id); const el=$(id); const d=box.closest('details'); if(d && !d.open) d.open=true; box.scrollIntoView({block:'center',behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'}); if(el && el.focus && /^(INPUT|TEXTAREA)$/.test(el.tagName)) el.focus({preventScroll:true}); }
+function goTo(id){ const box=fieldBox(id); const el=$(id); const d=box.closest('details'); if(d && !d.open) d.open=true; box.scrollIntoView({block:'center',behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'}); const fe=(el && /^(INPUT|TEXTAREA|SELECT)$/.test(el.tagName)) ? el : box.querySelector('select,.dd'); if(fe && fe.focus) fe.focus({preventScroll:true}); }
 function renderErrorList(list){
   const box=$('errors');
-  box.innerHTML='<strong>Antes de gerar o PDF, complete:</strong><ul>'+list.map(m=>'<li><button type="button" data-fix="'+m.id+'">'+esc(m.label)+'</button></li>').join('')+'</ul>';
+  box.innerHTML='<strong>Para salvar o termo, complete:</strong><ul>'+list.map(m=>'<li><button type="button" data-fix="'+m.id+'">'+esc(m.label)+'</button></li>').join('')+'</ul>';
   box.querySelectorAll('[data-fix]').forEach(b=>b.addEventListener('click',()=>goTo(b.dataset.fix)));
   box.hidden=false;
 }
@@ -683,7 +760,10 @@ form.addEventListener('input', e=>{
   if(el.id==='cpf' && onlyDigits(el.value).length===11) touched.cpf=true;
   refresh(); saveDraft();
 });
-form.addEventListener('change', e=>{ const t=e.target; if(t.id) touched[t.id]=true; if(GROUP_BOX[t.name]) touched[GROUP_BOX[t.name]]=true; refresh(); saveDraft(); });
+form.addEventListener('change', e=>{ const t=e.target; if(t.id) touched[t.id]=true; if(GROUP_BOX[t.name]) touched[GROUP_BOX[t.name]]=true;
+  if(t.closest('#motivosBox')) touched.motivosBox=true;
+  if(t.id==='gostou' && t.value==='nao') motivosOpen=true;
+  if(/^m[rc]Outro$/.test(t.id) && t.checked) setTimeout(()=>$(t.id+'Txt').focus(),0); refresh(); saveDraft(); });
 form.addEventListener('focusout', e=>{ const id=e.target.id; if(id && e.target.value!==undefined && e.target.value!=='' && e.target.type!=='radio'){ touched[id]=true; refresh(); } });
 /* Enter leva ao próximo campo */
 form.addEventListener('keydown', e=>{
@@ -704,10 +784,10 @@ function collect(){
   const o={__protocolo:state.protocolo};
   if(state.exemplo) o.__exemplo=true;
   if(!pad.isEmpty()){ o.__assinatura=pad.getStrokes(); o.__assinadoEm=state.assinadoEm; o.__proporcao=+pad.getAspect().toFixed(4); }
-  form.querySelectorAll('input,textarea').forEach(el=>{ if(el.type==='radio'){ if(el.checked) o['r:'+el.name]=el.value; } else if(el.type==='checkbox'){ if(el.checked) o[el.id]=true; } else if(el.id && el.value) o[el.id]=el.value; });
+  form.querySelectorAll('input,textarea,select').forEach(el=>{ if(el.type==='radio'){ if(el.checked) o['r:'+el.name]=el.value; } else if(el.type==='checkbox'){ if(el.checked) o[el.id]=true; } else if(el.id && el.value) o[el.id]=el.value; });
   return o;
 }
-function apply(o){ form.querySelectorAll('input,textarea').forEach(el=>{ if(el.type==='radio') el.checked = o['r:'+el.name]===el.value; else if(el.type==='checkbox') el.checked=!!o[el.id]; else if(el.id) el.value = o[el.id]||''; }); }
+function apply(o){ form.querySelectorAll('input,textarea,select').forEach(el=>{ if(el.type==='radio') el.checked = o['r:'+el.name]===el.value; else if(el.type==='checkbox') el.checked=!!o[el.id]; else if(el.tagName==='SELECT'){ el.value = o[el.id]||o['r:'+el.id]||''; if(el.selectedIndex<0) el.value=''; } else if(el.id) el.value = o[el.id]||''; }); }
 function restore(o){
   if(o.imovel && !o.imovel1) o.imovel1=o.imovel;
   apply(o); syncAddr(true); state.protocolo=o.__protocolo||newProtocol(); state.exemplo=!!o.__exemplo; state.assinadoEm=o.__assinadoEm||0;
@@ -721,10 +801,7 @@ window.addEventListener('pagehide',()=>{ clearTimeout(draftT); writeDraft(); });
 function setDefaults(){ if(!val('data')) $('data').value=todayISO(); if(!val('horaRetirada')) $('horaRetirada').value=nowHM(); }
 function resetUI(){ for(const k in touched) delete touched[k]; showAll=false; $('errors').hidden=true; $('sharePanel').hidden=true; }
 
-/* ---------- base de interessados (guardada neste aparelho) ---------- */
-let memBase=null; /* usado só se o navegador recusar guardar dados */
-function loadBase(){ if(memBase) return memBase.slice(); try{ const a=JSON.parse(localStorage.getItem(BASE_KEY)||'[]'); return Array.isArray(a)?a:[]; }catch(e){ return []; } }
-function storeBase(a){ try{ localStorage.setItem(BASE_KEY, JSON.stringify(a)); memBase=null; return true; }catch(e){ memBase=a.slice(); return false; } }
+/* ---------- dados do termo para a planilha ---------- */
 function moneyNum(s){ if(!s) return null; const n=Number(s.replace(/\./g,'').replace(',','.')); return isFinite(n)?n:null; }
 function num(s){ if(s===''||s==null) return null; const n=Number(String(s).replace(',','.')); return isFinite(n)?n:null; }
 function currentRecord(){
@@ -734,7 +811,7 @@ function currentRecord(){
     nome:val('nome'), cpf:val('cpf'), telefone:val('telefone'), email:val('email'), endereco:val('endereco'),
     imovel1:val('imovel1'), imovel2:val('imovel2'), imovel3:val('imovel3'), imovel4:val('imovel4'), horaRetirada:val('horaRetirada'), devolucao:val('devolucao'),
     documento:d?d.nome:'', formato:FORMATOS[rad('docFormato')]||'',
-    gostou:SN[rad('gostou')]||'', levouDocs:SN[rad('levouDocs')]||'',
+    gostou:SN[rad('gostou')]||'', motivos:motivosSel().join('; '), levouDocs:SN[rad('levouDocs')]||'',
     ateValor:moneyNum(val('ateValor')), garantia:GAR[rad('garantia')]||'',
     comodos:res?num(val('comodos')):null, pessoas:res?num(val('pessoas')):null, criancas:res?num(val('criancas')):null, vagas:res?num(val('vagas')):null,
     pet:res?(SN[rad('pet')]||''):'', independente:res?(SN[rad('independente')]||''):'',
@@ -743,60 +820,91 @@ function currentRecord(){
     exemplo:state.exemplo?'Sim':''
   };
 }
-/* grava (ou atualiza, pelo nº do termo) o termo na base */
-function registerInBase(){
-  const a=loadBase(), r=currentRecord(), i=a.findIndex(x=>x.protocolo===r.protocolo), now=Date.now();
-  if(i>=0){ r.registradoEm=a[i].registradoEm||now; r.atualizadoEm=now; a[i]=r; } else { r.registradoEm=now; a.push(r); }
-  const ok=storeBase(a); addToHistory();
-  return !ok ? 'memoria' : state.exemplo ? 'exemplo' : 'ok';
+
+/* ---------- histórico permanente (IndexedDB; fica até alguém apagar) ---------- */
+const HIST_KEY='termo-chaves-ar-historico', DAY=864e5, IDB_NAME='termo-chaves-ar', IDB_STORE='historico';
+let dbP=null;
+function idb(){
+  if(dbP) return dbP;
+  dbP=new Promise(res=>{
+    try{
+      if(!window.indexedDB) return res(null);
+      const r=indexedDB.open(IDB_NAME,1);
+      r.onupgradeneeded=()=>{ if(!r.result.objectStoreNames.contains(IDB_STORE)) r.result.createObjectStore(IDB_STORE,{keyPath:'protocolo'}); };
+      r.onsuccess=()=>res(r.result); r.onerror=()=>res(null); r.onblocked=()=>res(null);
+    }catch(e){ res(null); }
+  });
+  return dbP;
 }
-/* ---------- histórico: termos salvos nos últimos 7 dias ---------- */
-const HIST_KEY='termo-chaves-ar-historico', HIST_DAYS=7, DAY=864e5;
-function loadHist(){ let a=[]; try{ a=JSON.parse(localStorage.getItem(HIST_KEY)||'[]'); }catch(e){} if(!Array.isArray(a)) a=[]; const lim=Date.now()-HIST_DAYS*DAY; return a.filter(x=>x && x.savedAt>=lim && x.snap); }
-function storeHist(a){ a=a.slice().sort((x,y)=>y.savedAt-x.savedAt); while(true){ try{ localStorage.setItem(HIST_KEY, JSON.stringify(a)); return true; }catch(e){ if(a.length<=1) return false; a.pop(); } } }
+function idbReq(mode, fn){ return idb().then(db=>new Promise((res,rej)=>{ const t=db.transaction(IDB_STORE,mode); const st=t.objectStore(IDB_STORE); const rq=fn(st); t.oncomplete=()=>res(rq&&rq.result); t.onerror=()=>rej(t.error); t.onabort=()=>rej(t.error||new Error('abort')); })); }
+/* reserva em localStorage se o navegador não oferecer IndexedDB */
+function lsGet(){ try{ const a=JSON.parse(localStorage.getItem(HIST_KEY)||'[]'); return Array.isArray(a)?a.filter(x=>x&&x.snap):[]; }catch(e){ return []; } }
+function lsSet(a){ localStorage.setItem(HIST_KEY, JSON.stringify(a)); }
+async function histAll(){ const db=await idb(); if(!db) return lsGet(); return (await idbReq('readonly',st=>st.getAll()))||[]; }
+async function histPut(e){ const db=await idb(); if(!db){ const a=lsGet().filter(x=>x.protocolo!==e.protocolo); a.push(e); lsSet(a); return; } await idbReq('readwrite',st=>st.put(e)); }
+async function histDel(proto){ const db=await idb(); if(!db){ lsSet(lsGet().filter(x=>x.protocolo!==proto)); return; } await idbReq('readwrite',st=>st.delete(proto)); }
+async function histClear(){ const db=await idb(); if(!db){ lsSet([]); return; } await idbReq('readwrite',st=>st.clear()); }
+/* migra o histórico antigo (localStorage) para o IndexedDB, sem apagar nada */
+(async function migrate(){ try{ const db=await idb(); if(!db) return; const old=lsGet(); if(!old.length) return; for(const e of old) await idbReq('readwrite',st=>st.put(e)); localStorage.removeItem(HIST_KEY); }catch(e){} })();
+
 function hasInterest(){ return !!(rad('gostou')||rad('levouDocs')||rad('garantia')||val('ateValor')||rad('pet')||rad('independente')||rad('boaLocal')||val('comodos')||val('pessoas')||val('criancas')||val('vagas')||val('qtsM2')||val('finalidade')); }
-function addToHistory(){
-  const a=loadHist().filter(x=>x.protocolo!==state.protocolo);
-  a.push({protocolo:state.protocolo, nome:val('nome'), cpf:val('cpf'), tipo:TIPOS[rad('tipo')]||'', interesse:hasInterest(), exemplo:state.exemplo, savedAt:Date.now(), snap:collect()});
-  storeHist(a);
+/* grava (ou atualiza, pelo nº do termo) o termo no histórico; devolve 'novo' | 'atualizado' | 'erro' */
+async function saveTerm(){
+  try{
+    const prev=(await histAll()).find(x=>x.protocolo===state.protocolo), now=Date.now();
+    await histPut({protocolo:state.protocolo, nome:val('nome'), cpf:val('cpf'), tipo:TIPOS[rad('tipo')]||'', interesse:hasInterest(), exemplo:state.exemplo,
+      savedAt:now, firstSavedAt:prev?(prev.firstSavedAt||prev.savedAt):now, snap:collect()});
+    return prev?'atualizado':'novo';
+  }catch(e){ return 'erro'; }
 }
+function histMsg(r){ return r==='erro' ? 'não foi possível salvar no histórico (sem espaço no tablet)' : r==='novo' ? (state.exemplo?'termo de exemplo salvo no histórico':'termo salvo no histórico') : (state.exemplo?'termo de exemplo atualizado no histórico':'termo atualizado no histórico'); }
+const cap = t => t.charAt(0).toUpperCase()+t.slice(1);
+
 function whenText(ms){
   const d=new Date(ms), t=new Date(); const hm=pad2(d.getHours())+':'+pad2(d.getMinutes());
   const day0=new Date(t.getFullYear(),t.getMonth(),t.getDate()).getTime();
-  if(ms>=day0) return 'Hoje às '+hm; if(ms>=day0-DAY) return 'Ontem às '+hm;
-  return pad2(d.getDate())+'/'+pad2(d.getMonth()+1)+' às '+hm;
+  if(ms>=day0) return 'hoje às '+hm; if(ms>=day0-DAY) return 'ontem às '+hm;
+  return pad2(d.getDate())+'/'+pad2(d.getMonth()+1)+(d.getFullYear()!==t.getFullYear()?'/'+d.getFullYear():'')+' às '+hm;
 }
+let histCache=[];
 function renderHist(){
   const q=($('histSearch').value||'').trim().toLowerCase(), qd=/^[\d.\-\s]+$/.test(q)?onlyDigits(q):'';
-  const all_=loadHist().sort((x,y)=>y.savedAt-x.savedAt);
+  const all_=histCache.slice().sort((x,y)=>y.savedAt-x.savedAt);
   const list=all_.filter(x=>!q || (x.nome||'').toLowerCase().includes(q) || (x.protocolo||'').toLowerCase().includes(q) || (qd && onlyDigits(x.cpf).includes(qd)));
   const ul=$('histList'); ul.textContent='';
   list.forEach(x=>{
-    const li=document.createElement('li'), b=document.createElement('button');
-    b.type='button'; b.className='hist-item'; b.dataset.proto=x.protocolo;
+    const li=document.createElement('li'); li.className='hist-row';
+    const b=document.createElement('button'); b.type='button'; b.className='hist-item'; b.dataset.proto=x.protocolo;
     const main=document.createElement('span'); main.className='hist-main';
     const nm=document.createElement('span'); nm.className='hist-name'; nm.textContent=x.nome||'Sem nome';
-    const m1=document.createElement('span'); m1.className='hist-meta'; m1.textContent='CPF '+(x.cpf||'—')+' · Termo nº '+x.protocolo;
+    const m1=document.createElement('span'); m1.className='hist-meta'; m1.textContent='CPF '+(x.cpf||'—');
+    const m2=document.createElement('span'); m2.className='hist-meta'; m2.textContent='Termo nº '+x.protocolo;
     const tags=document.createElement('span'); tags.className='hist-tags';
     const pill=(cls,txt)=>{ const p=document.createElement('span'); p.className='pill '+cls; p.textContent=txt; tags.appendChild(p); };
     if(x.tipo) pill('ex',x.tipo);
     pill(x.interesse?'done':'pend', x.interesse?'Interesse preenchido':'Interesse pendente');
-    if(x.exemplo) pill('ex','Exemplo');
-    main.append(nm,m1,tags);
+    main.append(nm,m1,m2,tags);
     const side=document.createElement('span'); side.className='hist-side';
-    const w=document.createElement('span'); w.className='hist-when'; w.textContent='Salvo '+whenText(x.savedAt).replace(/^H/,'h').replace(/^O/,'o');
-    side.appendChild(w);
+    const w=document.createElement('span'); w.className='hist-when'; w.textContent='Salvo '+whenText(x.savedAt); side.appendChild(w);
     if(x.protocolo===state.protocolo){ const c=document.createElement('span'); c.className='pill cur'; c.textContent='Aberto agora'; side.appendChild(c); }
-    b.append(main,side); li.appendChild(b); ul.appendChild(li);
+    b.append(main,side);
+    const del=document.createElement('button'); del.type='button'; del.className='hist-del'; del.dataset.del=x.protocolo;
+    del.setAttribute('aria-label','Apagar o termo de '+(x.nome||'cliente')+' do histórico'); del.title='Apagar do histórico';
+    del.innerHTML=''+TRASH_SVG;
+    li.append(b,del); ul.appendChild(li);
   });
-  const empty=$('histEmpty');
-  empty.hidden=list.length>0;
-  empty.textContent = all_.length ? 'Nenhum termo encontrado para essa busca.' : 'Nenhum termo salvo nos últimos 7 dias. Os termos entram aqui quando o PDF ou a planilha são salvos ou compartilhados.';
+  const n=histCache.length;
+  $('histCount').textContent = n ? n+(n===1?' termo salvo neste tablet':' termos salvos neste tablet') : 'Nenhum termo salvo neste tablet';
+  $('histFoot').hidden = !n;
+  const empty=$('histEmpty'); empty.hidden=list.length>0;
+  empty.textContent = n ? 'Nenhum termo encontrado para essa busca.' : 'Nenhum termo salvo ainda. Use o botão Salvar para guardar o termo aqui.';
 }
-function openHist(){ closeMenus(); $('histSearch').value=''; renderHist(); const d=$('histDlg'); if(d.showModal){ if(!d.open) d.showModal(); } else d.setAttribute('open',''); }
+const TRASH_SVG='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M6 6l1 14h10l1-14"/><path d="M10 11v6M14 11v6"/></svg>';
+async function reloadHist(){ try{ histCache=await histAll(); }catch(e){ histCache=[]; } renderHist(); }
+async function openHist(){ closeMenus(); $('histSearch').value=''; histCache=[]; renderHist(); const d=$('histDlg'); if(d.showModal){ if(!d.open) d.showModal(); } else d.setAttribute('open',''); await reloadHist(); }
 function closeHist(){ const d=$('histDlg'); if(d.close) d.close(); else d.removeAttribute('open'); }
 function loadFromHistory(proto){
-  const e=loadHist().find(x=>x.protocolo===proto); if(!e) return;
+  const e=histCache.find(x=>x.protocolo===proto); if(!e) return;
   closeHist();
   if(proto===state.protocolo){ toast('Este termo já está aberto'); return; }
   const snap=snapshot();
@@ -805,10 +913,52 @@ function loadFromHistory(proto){
   cad.scrollIntoView({block:'start',behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});
   toast('Termo de '+(e.nome||'cliente')+' recuperado',{label:'Desfazer',fn:undoTo(snap)});
 }
+
+/* ---------- senha de administrador (vale enquanto o histórico estiver aberto) ---------- */
+const ADMIN_HASH='913a91e79129ef456477c793b9c746042852448906346ee7935a935ce1e618ab';
+/* SHA-256 compacto (texto ASCII) */
+function sha256(b){function c(a,b){return a>>>b|a<<32-b}var d,e,f=Math.pow,g=f(2,32),i="",j=[],k=8*b.length,l=sha256.h=sha256.h||[],m=sha256.k=sha256.k||[],n=m.length,o={},p=2;for(;64>n;p++)if(!o[p]){for(d=0;313>d;d+=p)o[d]=p;l[n]=f(p,.5)*g|0,m[n++]=f(p,1/3)*g|0}for(b+="\x80";b.length%64-56;)b+="\x00";for(d=0;d<b.length;d++){if(e=b.charCodeAt(d),e>>8)return"";j[d>>2]|=e<<(3-d)%4*8}for(j[j.length]=k/g|0,j[j.length]=k,e=0;e<j.length;){var q=j.slice(e,e+=16),r=l;for(l=l.slice(0,8),d=0;64>d;d++){var s=q[d-15],t=q[d-2],u=l[0],v=l[4],w=l[7]+(c(v,6)^c(v,11)^c(v,25))+(v&l[5]^~v&l[6])+m[d]+(q[d]=16>d?q[d]:q[d-16]+(c(s,7)^c(s,18)^s>>>3)+q[d-7]+(c(t,17)^c(t,19)^t>>>10)|0),x=(c(u,2)^c(u,13)^c(u,22))+(u&l[1]^u&l[2]^l[1]&l[2]);l=[w+x|0].concat(l),l[4]=l[4]+w|0}for(d=0;8>d;d++)l[d]=l[d]+r[d]|0}for(d=0;8>d;d++)for(e=3;e+1;e--){var y=l[d]>>8*e&255;i+=(16>y?"0":"")+y.toString(16)}return i}
+let pwResolve=null;
+function askAdmin(msg){
+  return new Promise(res=>{
+    pwResolve=res; $('pwMsg').textContent=msg; $('pwInput').value=''; $('pwErr').hidden=true;
+    const d=$('pwDlg'); if(d.showModal) d.showModal(); else d.setAttribute('open','');
+    setTimeout(()=>$('pwInput').focus(),30);
+  });
+}
+function endPw(ok){ const r=pwResolve; pwResolve=null; const d=$('pwDlg'); if(d.open){ if(d.close) d.close(); else d.removeAttribute('open'); } if(r) r(ok); }
+function checkPw(){
+  if(sha256($('pwInput').value)===ADMIN_HASH){ endPw(true); return; }
+  $('pwErr').hidden=false; const i=$('pwInput'); i.classList.remove('shake'); void i.offsetWidth; i.classList.add('shake'); i.select();
+}
+$('pwOk').addEventListener('click',checkPw);
+$('pwInput').addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); checkPw(); } });
+$('pwInput').addEventListener('input',()=>{ $('pwErr').hidden=true; });
+$('pwCancel').addEventListener('click',()=>endPw(false));
+$('pwDlg').addEventListener('close',()=>{ if(pwResolve) endPw(false); });
+$('histDlg').addEventListener('close',()=>{ document.body.appendChild($('toast')); });
+
+/* apagar um termo ou todo o histórico (com desfazer) */
+async function deleteOne(proto){
+  const e=histCache.find(x=>x.protocolo===proto); if(!e) return;
+  if(!await askAdmin('Para apagar o termo de '+(e.nome||'cliente')+' do histórico, digite a senha de administrador.')) return;
+  try{ await histDel(proto); }catch(err){ toast('Não foi possível apagar. Tente de novo.'); return; }
+  await reloadHist();
+  toast('Termo de '+(e.nome||'cliente')+' apagado do histórico',{label:'Desfazer',fn:async()=>{ await histPut(e); await reloadHist(); toast('Termo restaurado'); }});
+}
+async function deleteAll(){
+  const n=histCache.length; if(!n) return;
+  if(!await askAdmin('Para apagar todo o histórico ('+n+(n===1?' termo':' termos')+'), digite a senha de administrador.')) return;
+  const backup=histCache.slice();
+  try{ await histClear(); localStorage.removeItem(BASE_KEY); }catch(err){ toast('Não foi possível apagar. Tente de novo.'); return; }
+  await reloadHist();
+  toast('Histórico apagado ('+n+(n===1?' termo)':' termos)'),{label:'Desfazer',fn:async()=>{ for(const e of backup) await histPut(e); await reloadHist(); toast('Histórico restaurado'); }});
+}
 all('.js-hist').forEach(b=>b.addEventListener('click',openHist));
 $('histClose').addEventListener('click',closeHist);
 $('histSearch').addEventListener('input',renderHist);
-$('histList').addEventListener('click',e=>{ const b=e.target.closest('[data-proto]'); if(b) loadFromHistory(b.dataset.proto); });
+$('histList').addEventListener('click',e=>{ const d=e.target.closest('[data-del]'); if(d){ deleteOne(d.dataset.del); return; } const b=e.target.closest('[data-proto]'); if(b) loadFromHistory(b.dataset.proto); });
+$('histClearAll').addEventListener('click',deleteAll);
 $('histDlg').addEventListener('click',e=>{ if(e.target===$('histDlg')) closeHist(); });
 
 try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(()=>{}); }catch(e){}
@@ -849,7 +999,7 @@ function fillExample(){
   { const r=$('padCliente').getBoundingClientRect(); if(r.height) pad.setAspect(r.width/r.height); }
   syncAddr(true); pad.setStrokes(exampleSignature()); state.assinadoEm=Date.now(); state.exemplo=true; state.protocolo=newProtocol();
   resetUI(); refresh(); writeDraft();
-  toast('Exemplo preenchido. Ao salvar o PDF, ele entra na base marcado como exemplo.',{label:'Desfazer',fn:undoTo(snap)});
+  toast('Termo de exemplo preenchido. Ao salvar, ele entra no histórico marcado como exemplo.',{label:'Desfazer',fn:undoTo(snap)});
 }
 function newTerm(){
   const snap=snapshot();
@@ -863,10 +1013,11 @@ all('.js-new').forEach(b=>b.addEventListener('click',newTerm));
 
 /* ---------- PDF ---------- */
 const NAVY=[20,40,107], BLACK=[25,25,25], GREY=[150,150,150], RED=[168,26,32];
-function buildPDF(){
-  const { jsPDF } = window.jspdf;
-  const doc=new jsPDF({unit:'mm',format:'a4',compress:true});
-  const PW=210, PH=297, ML=13, MR=13, W=PW-ML-MR, TOP=14, BOTTOM=PH-16;
+const PW=210, PH=297, ML=13, MR=13;
+function newDoc(){ const { jsPDF } = window.jspdf; return new jsPDF({unit:'mm',format:'a4',compress:true}); }
+/* desenha o termo que está no formulário a partir da página atual do documento */
+function renderTerm(doc){
+  const W=PW-ML-MR, TOP=14, BOTTOM=PH-16, p0=doc.getNumberOfPages();
   let y=TOP;
   const FS=9.2, LH=4.2;
 
@@ -958,6 +1109,7 @@ function buildPDF(){
   /* ===== cadastro de interessados (fim do termo) ===== */
   head([{t:'Cadastro de Interessados',f:'bi'}]);
   row([T('Gostou do imóvel? '),...CB(rad('gostou')==='sim','Sim'),...CB(rad('gostou')==='nao','Não'),{t:'-  Levou relação de documentos? ',at:0.40},...CB(rad('levouDocs')==='sim','Sim'),...CB(rad('levouDocs')==='nao','Não')]);
+  if(rad('gostou')==='nao') row([L('Motivo(s) de não ter gostado: '),V(motivosSel().join('; '),40)]);
   if(tipo==='residencial'){
     row([T('Interesse: Cômodos ( '),V(val('comodos'),3),T(' ) - Pessoas ( '),V(val('pessoas'),3),T(' ) - Crianças ( '),V(val('criancas'),3),T(' ) - Vagas ( '),V(val('vagas'),3),
          T(' ) - Pet ( '),V(SN[rad('pet')],3),T(' ) - Imóvel independente ( '),V(SN[rad('independente')],3),T(' )')]);
@@ -966,15 +1118,24 @@ function buildPDF(){
   }
   row([T('Até que valor R$ '),V(val('ateValor'),14),{t:'–  Tipo de Garantia: ',at:0.36},...CB(rad('garantia')==='fiador','Fiador'),...CB(rad('garantia')==='seguro','Seguro Fiança'),...CB(rad('garantia')==='caucao','Depósito Caução')]);
 
-  /* rodapé */
-  const n=doc.getNumberOfPages(), stamp='Gerado em '+fmtStamp(Date.now());
-  for(let i=1;i<=n;i++){ doc.setPage(i); doc.setDrawColor(RED[0],RED[1],RED[2]); doc.setLineWidth(0.4); doc.line(ML,PH-11.5,PW-MR,PH-11.5);
+  /* rodapé das páginas deste termo */
+  const stamp='Gerado em '+fmtStamp(Date.now());
+  for(let i=p0;i<=doc.getNumberOfPages();i++){ doc.setPage(i); doc.setDrawColor(RED[0],RED[1],RED[2]); doc.setLineWidth(0.4); doc.line(ML,PH-11.5,PW-MR,PH-11.5);
     doc.setFont('helvetica','normal'); doc.setFontSize(7.2); doc.setTextColor(90,90,90);
-    doc.text('A. Rodrigues Imóveis S/S Ltda · CRECI 2.054 J · Termo nº '+proto+' · '+stamp,ML,PH-8);
-    doc.text('Página '+i+' de '+n,PW-MR,PH-8,{align:'right'}); }
-  doc.setProperties({title:'Termo de Recebimento de Chaves nº '+proto+(nome?' - '+nome:''),author:'A. Rodrigues Imóveis S/S Ltda',subject:'Termo de recebimento de chaves para visita de imóvel '+(TIPOS[tipo]||'').toLowerCase(),keywords:[proto,nome,cpf,...addrs()].filter(Boolean).join(', '),creator:'Termo de Recebimento de Chaves'});
+    doc.text('A. Rodrigues Imóveis S/S Ltda · CRECI 2.054 J · Termo nº '+proto+' · '+stamp,ML,PH-8); }
+}
+/* numera as páginas e define as propriedades do arquivo */
+function finishDoc(doc, props){
+  const n=doc.getNumberOfPages();
+  for(let i=1;i<=n;i++){ doc.setPage(i); doc.setFont('helvetica','normal'); doc.setFontSize(7.2); doc.setTextColor(90,90,90); doc.text('Página '+i+' de '+n,PW-MR,PH-8,{align:'right'}); }
+  doc.setProperties(Object.assign({author:'A. Rodrigues Imóveis S/S Ltda',creator:'Termo de Recebimento de Chaves'},props));
   try{ doc.setLanguage('pt-BR'); }catch(e){}
   return doc.output('blob');
+}
+function buildPDF(){
+  const doc=newDoc(); renderTerm(doc);
+  const nome=val('nome');
+  return finishDoc(doc,{title:'Termo de Recebimento de Chaves nº '+state.protocolo+(nome?' - '+nome:''),subject:'Termo de recebimento de chaves para visita de imóvel '+(TIPOS[rad('tipo')]||'').toLowerCase(),keywords:[state.protocolo,nome,val('cpf'),...addrs()].filter(Boolean).join(', ')});
 }
 function fileName(){ return 'Termo_Chaves_'+(TIPOS[rad('tipo')]||'')+'_'+(slug(val('nome')).slice(0,40)||'cliente')+'_'+state.protocolo+'.pdf'; }
 
@@ -991,41 +1152,86 @@ async function saveFile(blob,name){
   const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download=name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(url),60000);
   return 'saved';
 }
-function baseMsg(reg){ return reg==='exemplo' ? ' e registrado na base como exemplo' : reg==='memoria' ? ' e registrado na base, mas este navegador não guarda a base depois de fechar. Exporte a planilha antes de sair' : ' e termo registrado na base'; }
-function busy(on){ all('.js-menu').forEach(b=>b.disabled=on); }
-
-async function onSave(){
-  $('sharePanel').hidden=true;
-  if(!validate()) return;
-  busy(true);
-  try{
-    const blob=buildPDF(); const reg=registerInBase();
-    const st=await saveFile(blob, fileName());
-    toast(st==='saved' ? 'PDF salvo'+baseMsg(reg) : 'Salvamento cancelado');
+function busy(on){ all('.js-menu,.js-save,#histClearAll').forEach(b=>b.disabled=on); }
+const XLSX_TYPE='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+/* entrega o arquivo: compartilha (quando pedido e possível) ou salva no aparelho */
+async function deliver(blob,name,share,title){
+  if(share){
+    let file=null; try{ file=new File([blob],name,{type:blob.type}); }catch(e){}
+    if(file && navigator.canShare && navigator.share){
+      try{ if(navigator.canShare({files:[file]})){ await navigator.share({files:[file],title:name,text:title}); return 'shared'; } }
+      catch(e){ if(e && e.name==='AbortError') return 'cancel'; }
+    }
   }
-  catch(e){ toast('Não foi possível gerar o PDF: '+(e&&e.message||e)); }
-  finally{ busy(false); }
+  const st=await saveFile(blob,name);
+  return st==='saved' ? (share?'fallback':'saved') : 'declined';
 }
-async function onShare(){
-  $('sharePanel').hidden=true;
-  if(!validate()) return;
-  let blob; try{ blob=buildPDF(); }catch(e){ toast('Não foi possível gerar o PDF: '+(e&&e.message||e)); return; }
-  const reg=registerInBase();
-  const name=fileName(); const text='Termo de Recebimento de Chaves nº '+state.protocolo+' - A. Rodrigues Imóveis'+(addrs().length?' - Imóvel: '+addrText():'');
-  let file=null; try{ file=new File([blob],name,{type:'application/pdf'}); }catch(e){}
-  if(file && navigator.canShare && navigator.share){
-    try{ if(navigator.canShare({files:[file]})){ await navigator.share({files:[file],title:name,text}); toast('PDF compartilhado'+baseMsg(reg)); return; } }
-    catch(e){ if(e && e.name==='AbortError'){ toast('Compartilhamento cancelado'); return; } }
-  }
-  /* sem menu de compartilhamento: salva o arquivo e oferece os atalhos */
-  busy(true); const st=await saveFile(blob,name); busy(false);
+function shareFallbackPanel(text){
   const d=onlyDigits(val('telefone')); const num2 = d.length>=10 ? (d.startsWith('55')&&d.length>11?d:'55'+d) : '';
   const msg='Olá'+(val('nome')?', '+val('nome').split(' ')[0]:'')+'! Segue o '+text+'. O PDF vai em anexo.';
   $('waLink').href='https://wa.me/'+num2+'?text='+encodeURIComponent(msg);
   $('mailLink').href='mailto:'+encodeURIComponent(val('email'))+'?subject='+encodeURIComponent(text)+'&body='+encodeURIComponent(msg);
   $('mailLink').hidden=!val('email');
-  $('shareMsg').textContent = st==='saved' ? 'O PDF foi salvo neste aparelho. Abra a conversa pelo atalho e anexe o arquivo.' : 'Salve o PDF primeiro e depois anexe o arquivo na conversa.';
+  $('shareMsg').textContent='O PDF foi salvo neste aparelho. Abra a conversa pelo atalho e anexe o arquivo.';
   $('sharePanel').hidden=false; $('sharePanel').scrollIntoView({block:'center'});
+}
+
+/* Salvar: guarda o termo no histórico */
+async function onSaveHist(){
+  $('sharePanel').hidden=true;
+  if(!validate()) return;
+  busy(true); const r=await saveTerm(); busy(false);
+  toast(cap(histMsg(r)));
+}
+/* PDF ou planilha do termo atual, no aparelho ou compartilhado (também salva no histórico) */
+async function exportTerm(kind, share){
+  $('sharePanel').hidden=true;
+  if(!validate()) return;
+  busy(true);
+  try{
+    let blob, name;
+    if(kind==='pdf'){ blob=buildPDF(); name=fileName(); }
+    else { blob=await buildXLSX([Object.assign(currentRecord(),{registradoEm:Date.now()})],'Termo'); name=fileName().replace(/\.pdf$/,'.xlsx'); }
+    const r=await saveTerm(), hm=histMsg(r);
+    const label = kind==='pdf' ? 'PDF' : 'Planilha';
+    const text='Termo de Recebimento de Chaves nº '+state.protocolo+' - A. Rodrigues Imóveis'+(addrs().length?' - Imóvel: '+addrText():'');
+    const st=await deliver(blob,name,share,text);
+    if(st==='shared') toast(label+' compartilhad'+(kind==='pdf'?'o':'a')+' e '+hm);
+    else if(st==='saved') toast(label+' salv'+(kind==='pdf'?'o':'a')+' no dispositivo e '+hm);
+    else if(st==='fallback'){ if(kind==='pdf') shareFallbackPanel(text); toast(label+' salv'+(kind==='pdf'?'o':'a')+' no dispositivo (este aparelho não abriu o compartilhamento) e '+hm); }
+    else toast(st==='cancel'?'Compartilhamento cancelado':'Salvamento cancelado');
+  }catch(e){ toast(e&&e.message==='sem internet' ? 'Não foi possível gerar a planilha. Verifique a internet e tente de novo.' : 'Não foi possível gerar o arquivo: '+(e&&e.message||e)); }
+  finally{ busy(false); }
+}
+/* todos os termos do histórico: um PDF com uma página por cliente ou uma planilha com uma linha por cliente */
+async function exportAll(kind, share){
+  const list=histCache.slice();
+  let legacy=[]; try{ legacy=JSON.parse(localStorage.getItem(BASE_KEY)||'[]'); if(!Array.isArray(legacy)) legacy=[]; }catch(e){}
+  legacy=legacy.filter(r=>r && !list.some(x=>x.protocolo===r.protocolo));
+  if(!list.length && !(kind==='xlsx' && legacy.length)){ toast('O histórico está vazio.'); return; }
+  if(!await askAdmin('Para salvar ou compartilhar todos os termos do histórico, digite a senha de administrador.')) return;
+  busy(true); toast(kind==='pdf'?'Gerando o PDF com todos os termos…':'Gerando a planilha com todos os termos…');
+  await new Promise(r=>setTimeout(r,60));
+  const snap0=collect();
+  const key=e=>((e.snap['data']||'')+(e.snap['horaRetirada']||''));
+  list.sort((a,b)=>key(a).localeCompare(key(b)) || a.savedAt-b.savedAt);
+  try{
+    let blob, name, n;
+    if(kind==='pdf'){
+      const doc=newDoc();
+      list.forEach((e,i)=>{ if(i) doc.addPage(); restore(JSON.parse(JSON.stringify(e.snap))); renderTerm(doc); });
+      blob=finishDoc(doc,{title:'Histórico de Termos de Recebimento de Chaves - A. Rodrigues Imóveis',subject:list.length+' termos'});
+      name='Historico_Termos_AR_'+todayISO()+'.pdf'; n=list.length;
+    } else {
+      const recs=list.map(e=>{ restore(JSON.parse(JSON.stringify(e.snap))); return Object.assign(currentRecord(),{registradoEm:e.firstSavedAt||e.savedAt}); }).concat(legacy);
+      blob=await buildXLSX(recs,'Interessados'); name='Historico_Interessados_AR_'+todayISO()+'.xlsx'; n=recs.length;
+    }
+    restore(snap0); refresh();
+    const qtd=n+(n===1?' termo':' termos'), label=kind==='pdf'?'PDF':'Planilha', g=kind==='pdf'?'o':'a';
+    const st=await deliver(blob,name,share,'Histórico - A. Rodrigues Imóveis');
+    toast(st==='shared' ? label+' compartilhad'+g+' com '+qtd : st==='saved' ? label+' salv'+g+' no dispositivo com '+qtd : st==='fallback' ? label+' salv'+g+' no dispositivo com '+qtd+' (este aparelho não abriu o compartilhamento)' : st==='cancel' ? 'Compartilhamento cancelado' : 'Salvamento cancelado');
+  }catch(e){ restore(snap0); refresh(); toast(e&&e.message==='sem internet' ? 'Não foi possível gerar a planilha. Verifique a internet e tente de novo.' : 'Não foi possível gerar o arquivo: '+(e&&e.message||e)); }
+  finally{ busy(false); }
 }
 
 /* ---------- exportação da base para Excel (.xlsx) ---------- */
@@ -1047,6 +1253,7 @@ const XLSX_COLS = [
   ['Documento','documento',30],
   ['Físico ou digital','formato',12],
   ['Gostou do imóvel','gostou',11],
+  ['Motivo de não ter gostado','motivos',42],
   ['Levou relação de documentos','levouDocs',14],
   ['Valor máximo de aluguel','ateValor',16,'"R$" #,##0.00'],
   ['Tipo de garantia','garantia',17],
@@ -1067,11 +1274,11 @@ function loadScript(src){ return new Promise((res,rej)=>{ const s=document.creat
 /* datas gravadas como hora local, sem deslocamento de fuso no Excel */
 function xDate(iso){ if(!iso) return null; const [y,m,d]=iso.split('-').map(Number); return new Date(Date.UTC(y,m-1,d)); }
 function xStamp(ms){ if(!ms) return null; const d=new Date(ms); return new Date(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate(),d.getHours(),d.getMinutes())); }
-async function buildXLSX(){
+async function buildXLSX(rows, sheet){
   if(!window.ExcelJS) await loadScript(EXCELJS_URL);
-  const recs=loadBase().slice().sort((a,b)=>((a.data||'')+(a.horaRetirada||'')).localeCompare((b.data||'')+(b.horaRetirada||'')) || (a.registradoEm||0)-(b.registradoEm||0));
+  const recs=rows.slice().sort((a,b)=>((a.data||'')+(a.horaRetirada||'')).localeCompare((b.data||'')+(b.horaRetirada||'')) || (a.registradoEm||0)-(b.registradoEm||0));
   const wb=new window.ExcelJS.Workbook(); wb.creator='A. Rodrigues Imóveis'; wb.created=new Date();
-  const ws=wb.addWorksheet('Interessados',{views:[{state:'frozen',ySplit:1}]});
+  const ws=wb.addWorksheet(sheet||'Interessados',{views:[{state:'frozen',ySplit:1}]});
   ws.columns=XLSX_COLS.map(c=>({header:c[0],key:c[1],width:c[2],style:c[3]?{numFmt:c[3]}:{}}));
   recs.forEach(r=>{
     if(r.imovel && !r.imovel1) r.imovel1=r.imovel; /* termos antigos, de um endereço só */
@@ -1084,34 +1291,12 @@ async function buildXLSX(){
   const buf=await wb.xlsx.writeBuffer();
   return new Blob([buf],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
 }
-function xlsxName(){ return 'Base_Interessados_AR_'+todayISO()+'.xlsx'; }
-/* planilha: inclui o termo atual (se estiver completo) e exporta todos os termos deste tablet */
-async function onExport(share){
-  $('sharePanel').hidden=true;
-  const pend=checks(), started=!!(val('nome')||val('imovel1')||val('cpf'));
-  let note='';
-  if(!pend.length) registerInBase();
-  else if(started) note=' O termo atual ainda está incompleto e não entrou.';
-  const n=loadBase().length;
-  if(!n){ validate(); toast('Complete e assine o termo para gerar a planilha.'); return; }
-  busy(true);
-  try{
-    let blob; try{ blob=await buildXLSX(); }catch(e){ toast(e&&e.message==='sem internet' ? 'Não foi possível gerar a planilha. Verifique a internet e tente de novo.' : 'Não foi possível gerar a planilha: '+(e&&e.message||e)); return; }
-    const name=xlsxName(), qtd=n+(n===1?' termo':' termos');
-    if(share){
-      let file=null; try{ file=new File([blob],name,{type:blob.type}); }catch(e){}
-      if(file && navigator.canShare && navigator.share){
-        try{ if(navigator.canShare({files:[file]})){ await navigator.share({files:[file],title:name,text:'Base de interessados - A. Rodrigues Imóveis'}); toast('Planilha compartilhada com '+qtd+'.'+note); return; } }
-        catch(e){ if(e && e.name==='AbortError'){ toast('Compartilhamento cancelado'); return; } }
-      }
-    }
-    const st=await saveFile(blob,name);
-    toast(st==='saved' ? 'Planilha salva com '+qtd+'.'+note : 'Salvamento cancelado');
-  } finally { busy(false); }
-}
-
 /* ---------- menus Salvar / Compartilhar ---------- */
-const ACTIONS={ 'save-pdf':onSave, 'share-pdf':onShare, 'save-xlsx':()=>onExport(false), 'share-xlsx':()=>onExport(true) };
+const ACTIONS={
+  'dev-pdf':()=>exportTerm('pdf',false), 'dev-xlsx':()=>exportTerm('xlsx',false), 'share-pdf':()=>exportTerm('pdf',true), 'share-xlsx':()=>exportTerm('xlsx',true),
+  'all-dev-pdf':()=>exportAll('pdf',false), 'all-dev-xlsx':()=>exportAll('xlsx',false), 'all-share-pdf':()=>exportAll('pdf',true), 'all-share-xlsx':()=>exportAll('xlsx',true)
+};
+all('.js-save').forEach(b=>b.addEventListener('click',onSaveHist));
 function closeMenus(except){ all('.mw').forEach(w=>{ if(w===except) return; w.querySelector('.menu').hidden=true; w.querySelector('.js-menu').setAttribute('aria-expanded','false'); }); }
 all('.mw').forEach(w=>{
   const btn=w.querySelector('.js-menu'), m=w.querySelector('.menu');
