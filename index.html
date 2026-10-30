@@ -48,18 +48,19 @@ body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-siz
 .wrap{max-width:940px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
 
 /* Barra de ações no topo: secundárias à esquerda, Salvar/Compartilhar e tema à direita */
-.bar{display:grid;grid-template-columns:auto 1fr auto auto;grid-template-areas:"sec . pri theme";align-items:center;gap:10px;background:var(--sheet);border:1px solid var(--line);border-radius:var(--r);padding:10px}
+.bar{display:grid;grid-template-columns:auto 1fr auto auto auto;grid-template-areas:"sec . pri theme out";align-items:center;gap:10px;background:var(--sheet);border:1px solid var(--line);border-radius:var(--r);padding:10px}
 .bar-sec{grid-area:sec;display:flex;gap:8px}
 .bar-pri{grid-area:pri;display:flex;gap:8px}
 .bar .theme{grid-area:theme}
+.bar > .js-logout{grid-area:out}
 .bar .btn{min-height:44px;padding:8px 14px;font-size:.92rem;white-space:nowrap}
 .bar .btn svg{width:18px;height:18px}
 .t-short{display:none}
 .ns{display:none}
-@media (max-width:360px){ .bar .nl{display:none} .bar .ns{display:inline} }
+@media (max-width:420px){ .bar .nl{display:none} .bar .ns{display:inline} }
 @media (max-width:1000px){ .bar .t-long{display:none} .bar .t-short{display:inline} }
-@media (max-width:860px){
-  .bar{grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"sec theme" "pri pri"}
+@media (max-width:900px){
+  .bar{grid-template-columns:minmax(0,1fr) auto auto;grid-template-areas:"sec theme out" "pri pri pri"}
   .bar-sec,.bar-pri{min-width:0}
   .bar-sec .btn,.bar-pri .mw,.bar-pri > .btn{flex:1 1 0;min-width:0}
   .bar .btn{padding:8px 10px;font-size:.88rem}
@@ -69,7 +70,16 @@ body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-siz
   .bar .js-new svg,.bar .js-example svg{display:none}
   .bar .js-hist{flex:0 0 44px;padding:0}
   .bar .js-hist .t-hist{display:none}
+  .bar .js-logout{flex:0 0 44px;width:44px;padding:0}
+  .bar .js-logout .t-out{display:none}
 }
+@media (max-width:360px){
+  .bar,.bar-sec,.bar-pri{gap:6px}
+  .bar .theme,.bar .js-logout,.bar .js-hist{width:40px;flex:0 0 40px}
+  .bar .bar-sec .btn{padding:8px 4px}
+  .bar .bar-pri .js-menu{padding:8px 4px;gap:4px}
+}
+@media (max-width:340px){ .bar .bar-sec .btn{font-size:.8rem} }
 /* Rodapé: mesma barra, Salvar/Compartilhar primeiro e sem o tema */
 .fim-area{gap:14px}
 .bar.foot{grid-template-columns:auto 1fr auto;grid-template-areas:"pri . sec";background:transparent;border:0;border-radius:0;padding:0}
@@ -303,6 +313,24 @@ input:focus-visible,textarea:focus-visible,button:focus-visible,summary:focus-vi
 .toast:not(.has-action){padding-right:18px}
 @media (prefers-reduced-motion: no-preference){.btn,.opt span,.theme{transition:background .15s,border-color .15s,color .15s}}
 @media (prefers-reduced-motion: reduce){.fold > summary .chev,.btn .caret{transition:none}}
+/* Tela de entrada (barreira contra acesso casual; não é segurança real) */
+html:not(.auth) .wrap, html:not(.auth) .toast, html:not(.auth) .dlg, html:not(.auth) .app-only{display:none!important}
+html.auth .login{display:none}
+.login{min-height:calc(100dvh - 120px);display:flex;align-items:center;justify-content:center}
+.login-card{width:100%;max-width:400px;background:var(--sheet);border:1px solid var(--line);border-radius:14px;padding:28px 24px 24px;display:flex;flex-direction:column;gap:16px;box-shadow:0 10px 30px rgba(0,0,0,.06)}
+.login-logo{display:flex;justify-content:center}
+.login-logo img{width:min(220px,70%);height:auto}
+.login-card h1{margin:0;text-align:center;font:600 1.4rem var(--font-display);color:var(--ink)}
+.login-card .f{gap:6px}
+.pw-wrap{position:relative}
+.pw-wrap input{padding-right:52px}
+.pw-eye{position:absolute;right:4px;top:50%;transform:translateY(-50%);width:44px;height:44px;border:0;border-radius:8px;background:transparent;color:var(--muted);display:inline-flex;align-items:center;justify-content:center;cursor:pointer}
+.pw-eye svg{width:20px;height:20px}
+.pw-eye[aria-pressed="true"]{color:var(--brand)}
+.login-err{margin:0;color:var(--warn);font-size:.92rem;font-weight:600}
+.login-card .btn{width:100%}
+.credit{display:flex;justify-content:center;margin:22px auto 0;max-width:940px}
+.credit small{color:var(--muted);font-size:.82rem}
 </style>
 </head>
 <body>
@@ -321,6 +349,7 @@ input:focus-visible,textarea:focus-visible,button:focus-visible,summary:focus-vi
       <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.2M12 19.8V22M4.9 4.9l1.6 1.6M17.5 17.5l1.6 1.6M2 12h2.2M19.8 12H22M4.9 19.1l1.6-1.6M17.5 6.5l1.6-1.6"/></svg>
       <svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5 8.5 8.5 0 1 0 20.5 14.2z"/></svg>
       </button>
+    <button type="button" class="btn quiet js-logout" title="Sair" aria-label="Sair"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/></svg><span class="t-out">Sair</span></button>
   </div>
 
   <header class="head">
@@ -425,6 +454,7 @@ input:focus-visible,textarea:focus-visible,button:focus-visible,summary:focus-vi
         <button type="button" class="btn quiet js-new"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span class="nl">Novo termo</span><span class="ns">Novo</span></button>
         <button type="button" class="btn quiet js-hist" title="Histórico dos últimos 7 dias"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 2.64-6.36"/><path d="M3 4v5h5"/><path d="M12 7.5V12l3 2"/></svg><span class="t-hist">Histórico</span></button>
         <button type="button" class="btn quiet js-example"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.8 4.7 4.7 1.8-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z"/><path d="M19 15v4M17 17h4"/></svg><span class="t-long">Termo exemplo</span><span class="t-short">Exemplo</span></button>
+        <button type="button" class="btn quiet js-logout" title="Sair" aria-label="Sair"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/></svg><span class="t-out">Sair</span></button>
       </div>
     </div>
       <div class="panel" id="sharePanel" hidden>
@@ -458,6 +488,19 @@ input:focus-visible,textarea:focus-visible,button:focus-visible,summary:focus-vi
   </div>
 </dialog>
 <div class="toast" id="toast" role="status" aria-live="polite" hidden><span id="toastMsg"></span><button type="button" id="toastBtn" hidden></button></div>
+<main class="login" id="login" aria-labelledby="loginTitle">
+  <div class="login-card">
+    <div class="login-logo"><img id="loginLogo" alt="A. Rodrigues Imóveis"></div>
+    <h1 id="loginTitle">Termo de Chaves</h1>
+    <div class="f"><label for="loginUser">Usuário</label><input type="text" id="loginUser" autocomplete="off" autocapitalize="off" spellcheck="false" aria-describedby="loginErr"></div>
+    <div class="f"><label for="loginPass">Senha</label><div class="pw-wrap"><input type="password" id="loginPass" autocomplete="off" aria-describedby="loginErr"><button type="button" class="pw-eye" id="loginEye" aria-label="Mostrar senha" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button></div></div>
+    <p class="login-err" id="loginErr" role="alert" aria-live="assertive"></p>
+    <button type="button" class="btn" id="loginBtn">Entrar</button>
+  </div>
+</main>
+<footer class="credit">
+  <small>© 2026 Antunes Tech v.1.1</small>
+</footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
@@ -1309,6 +1352,43 @@ all('.mw').forEach(w=>{
   });
 });
 document.addEventListener('click',()=>closeMenus());
+
+/* ---------- tela de entrada ----------
+   Barreira apenas contra acesso casual: o código roda no navegador e pode ser lido ou alterado.
+   Não protege os dados guardados no aparelho. A senha não fica em texto no código (só o SHA-256),
+   e nada do login é gravado: recarregar a página pede o login de novo. */
+const LOGIN_USER='rodrigues';  /* comparado sem diferenciar maiúsculas e minúsculas */
+const LOGIN_HASH='77a49e8b34ed6b1d2d347b00a09dce06ca820b52902d3f88c89a7de71684244f';  /* SHA-256 da senha */
+$('loginLogo').src=LOGO;
+function clearLogin(){ $('loginUser').value=''; $('loginPass').value=''; $('loginPass').type='password'; $('loginEye').setAttribute('aria-pressed','false'); $('loginEye').setAttribute('aria-label','Mostrar senha'); }
+function tryLogin(){
+  const u=$('loginUser').value.trim().toLowerCase(), ok = u===LOGIN_USER && sha256($('loginPass').value)===LOGIN_HASH;
+  if(!ok){
+    $('loginErr').textContent = (!u || !$('loginPass').value) ? 'Informe o usuário e a senha.' : 'Usuário ou senha incorretos.';
+    const i=$('loginPass'); i.value=''; i.classList.remove('shake'); void i.offsetWidth; i.classList.add('shake'); i.focus();
+    return;
+  }
+  clearLogin(); $('loginErr').textContent='';
+  document.documentElement.classList.add('auth'); $('login').inert=true; document.querySelector('.wrap').inert=false;
+  scrollTo(0,0);
+}
+function logout(){
+  closeMenus(); if(motivosOpen) setMotivos(false);
+  if($('pwDlg').open) endPw(false);
+  if($('histDlg').open) closeHist();
+  $('toast').hidden=true; $('sharePanel').hidden=true;
+  if(document.activeElement && document.activeElement.blur) document.activeElement.blur();
+  clearLogin(); $('loginErr').textContent='';
+  document.documentElement.classList.remove('auth'); document.querySelector('.wrap').inert=true; $('login').inert=false;
+  scrollTo(0,0); $('loginUser').focus();
+}
+$('loginBtn').addEventListener('click',tryLogin);
+['loginUser','loginPass'].forEach(id=>$(id).addEventListener('keydown',e=>{ if(e.key==='Enter' && !e.isComposing){ e.preventDefault(); if(id==='loginUser' && !$('loginPass').value) $('loginPass').focus(); else tryLogin(); } }));
+['loginUser','loginPass'].forEach(id=>$(id).addEventListener('input',()=>{ $('loginErr').textContent=''; }));
+$('loginEye').addEventListener('click',()=>{ const p=$('loginPass'), show=p.type==='password'; p.type=show?'text':'password'; $('loginEye').setAttribute('aria-pressed',String(show)); $('loginEye').setAttribute('aria-label',show?'Ocultar senha':'Mostrar senha'); p.focus(); });
+all('.js-logout').forEach(b=>b.addEventListener('click',logout));
+document.querySelector('.wrap').inert=true;
+clearLogin(); $('loginUser').focus();
 document.addEventListener('keydown',e=>{ if(e.key==='Escape'){ const open=[...all('.mw')].find(w=>!w.querySelector('.menu').hidden); closeMenus(); if(open) open.querySelector('.js-menu').focus(); } });
 })();
 </script>
